@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alyssum - 마이페이지</title>
+  <link rel="stylesheet" href="./css/font.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f6f4f4;
+    }
+
+    header {
+      background-color: #a7cba9;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .profile-section {
+      display: flex;
+      padding: 2rem;
+      background-color: white;
+    }
+
+    .profile-image {
+      width: 200px;
+      height: 200px;
+      background-color: #ccc;
+      margin-right: 2rem;
+    }
+
+    .profile-info h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-info p {
+      margin-bottom: 0.3rem;
+    }
+
+    .recent-posts {
+      background-color: #eee;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .recent-posts h3 {
+      margin-bottom: 1rem;
+    }
+
+    .post-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .post {
+      background-color: #fff9b0;
+      padding: 1rem;
+      width: 180px;
+    }
+
+    .post-image {
+      width: 100%;
+      height: 120px;
+      background-color: #bbb;
+      margin-bottom: 0.5rem;
+    }
+
+    .features {
+      background-color: #b2e2b2;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .features h3 {
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-icons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .feature-icons div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    footer {
+      background-color: #b2e2b2;
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .contact, .hours {
+      width: 45%;
+    }
+
+    .map {
+      width: 45%;
+      background-color: #a3d9a3;
+      height: 100px;
+      text-align: center;
+      line-height: 100px;
+    }
+
+    .footer-note {
+      text-align: center;
+      padding: 1rem;
+      background-color: #94d494;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="bg-[#a7cba9] top-0 z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-1">
+      <!-- Hamburger Menu -->
+      <div class="flex items-center">
+        <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Center: Logo -->
+      <div class="flex justify-center">
+        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 오버레이 & 사이드 메뉴 -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+  <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
+    <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
+    <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
+      <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
+      <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
+      <a href="./설정페이지.html" class="px-4 py-2 hover:bg-gray-100">설정페이지</a>
+      <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
+    </nav>
+  </div>
+
+  <!-- 프로필 섹션 -->
+  <section class="profile-section">
+    <div class="profile-image"></div>
+    <div class="profile-info">
+      <h2>이름</h2>
+      <p>이 페이지에 관한 설명</p>
+    </div>
+  </section>
+
+  <!-- 최근 게시글 -->
+  <section class="recent-posts" id="recentPostsSection">
+    <h3>최근 일기</h3>
+    <div class="post-list" id="postList"></div>
+  </section>
+
+  <!-- 기능 영역 -->
+  <section class="features">
+
+    <div class="feature-icons">
+      <div>
+        <a href="./작성페이지.html">
+          <img class='w-8 h-8 object-fit: contain;' src="./img/ChatGPT Image 2025년 8월 29일 오후 02_56_47.png" alt="">
+        </a>
+        <a href="./작성페이지.html">
+          새글쓰기
+        </a>
+      </div>
+      <!-- <div>💾<br>데이터 백업</div>
+      <div>⏫<br>데이터 불러오기</div>
+    </div> -->
+  </section>
+
+  <!-- Footer 영역은 필요 시 추가 -->
+
+  <!-- 스크립트 -->
+  <script>
+    // 햄버거 메뉴 동작
+    const menuButton = document.getElementById('menu-button');
+    const sideMenu = document.getElementById('side-menu');
+    const closeButton = document.getElementById('close-button');
+    const overlay = document.getElementById('overlay');
+
+    menuButton.addEventListener('click', () => {
+      sideMenu.classList.remove('-translate-x-full');
+      overlay.classList.remove('hidden');
+    });
+
+    function closeMenu() {
+      sideMenu.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    }
+
+    closeButton.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    // 최근 일기 렌더링
+    const diaryData = [
+      { title: "가장최근 제목", content: "일기 내용입니다. 오늘은 날씨가 맑았어요." },
+      { title: "그전꺼 제목", content: "이전 일기 내용입니다. 점심에 김밥을 먹었어요." },
+      { title: "그전꺼 제목", content: "아무튼 잘 마무리했습니다. 굿굿굿." }
+    ];
+
+    const postList = document.getElementById('postList');
+    const section = document.getElementById('recentPostsSection');
+
+    if (diaryData.length === 0) {
+      section.style.display = 'none';
+    } else {
+      diaryData.forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'post';
+        div.innerHTML = `
+          <div class="post-image"></div>
+          <strong>${post.title}</strong>
+          <p>${post.content}</p>
+        `;
+        postList.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>

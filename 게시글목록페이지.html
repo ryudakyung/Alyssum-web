@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Alyssum - 게시글 목록</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/font.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: #f6f4f4;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 400px;
+        margin: 40px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      h2 {
+        margin-top: 0;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .post-button {
+        display: block;
+        width: 80%;
+        margin: 10px auto;
+        padding: 10px;
+        border: 1px solid #999;
+        border-radius: 8px;
+        background-color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.2s;
+      }
+
+      .post-button:hover {
+        background-color: #f0f0f0;
+      }
+
+      .pagination {
+        margin-top: 20px;
+      }
+
+      .page-number {
+        display: inline-block;
+        padding: 5px 10px;
+        border: 1px solid #999;
+        border-radius: 4px;
+        background-color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="bg-[#a7cba9] top-0 z-10">
+      <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-4">
+        <!-- Left: Hamburger Menu -->
+        <div class="flex items-center">
+          <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Center: Logo -->
+        <div class="flex justify-center">
+          <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
+        </div>
+
+        <!-- Right: Auth Button -->
+        <div class="flex justify-end text-sm pr-0">
+          <a href="./마이페이지.html" class="text-white px-4 py-1 transition hover:underline">마이페이지</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+
+    <!-- Side Menu -->
+    <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
+      <!-- Close Button -->
+      <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
+
+      <!-- Menu Links -->
+      <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
+        <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
+        <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
+        <a href="./설정페이지.html" class="px-4 py-2 hover:bg-gray-100">설정페이지</a>
+        <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <h2>게시글 목록</h2>
+      <!-- 게시물 버튼 목록 -->
+      <button class="post-button">게시물 1</button>
+      <button class="post-button">게시물 2</button>
+      <button class="post-button">게시물 3</button>
+      <button class="post-button">게시물 4</button>
+      <button class="post-button">게시물 5</button>
+      <button class="post-button">게시물 6</button>
+      <button class="post-button">게시물 7</button>
+      <button class="post-button">게시물 8</button>
+      <button class="post-button">게시물 9</button>
+      <button class="post-button">게시물 10</button>
+
+      <div class="pagination">
+        <span class="page-number">1</span>
+      </div>
+    </div>
+
+    <!-- Side Menu Script -->
+    <script>
+      const menuButton = document.getElementById('menu-button');
+      const sideMenu = document.getElementById('side-menu');
+      const closeButton = document.getElementById('close-button');
+      const overlay = document.getElementById('overlay');
+
+      menuButton.addEventListener('click', () => {
+        sideMenu.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      });
+
+      function closeMenu() {
+        sideMenu.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+
+      closeButton.addEventListener('click', closeMenu);
+      overlay.addEventListener('click', closeMenu);
+    </script>
+  </body>
+</html>
