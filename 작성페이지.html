@@ -61,8 +61,8 @@
   <!-- Header -->
   <header class="bg-[#a7cba9] top-0 z-10">
     <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-4">
-      
-      <!-- Left: Hamburger Menu -->
+
+      <!-- Left -->
       <div class="flex items-center">
         <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -71,14 +71,14 @@
         </button>
       </div>
 
-      <!-- Center: Logo -->
+      <!-- Center -->
       <div class="flex justify-center">
         <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
       </div>
 
-      <!-- Right: My Page -->
+      <!-- Right -->
       <div class="flex justify-end text-sm pr-0">
-        <a href="./마이페이지.html" class="text-white px-4 py-1 transition hover:underline">마이페이지</a>
+        <a href="./마이페이지.html" class="text-white px-4 py-1 hover:underline">마이페이지</a>
       </div>
     </div>
   </header>
@@ -87,11 +87,10 @@
   <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
 
   <!-- Side Menu -->
-  <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
-    <!-- Close Button -->
+  <div id="side-menu"
+       class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
     <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
 
-    <!-- Menu Links -->
     <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
       <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
       <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
@@ -103,56 +102,88 @@
   <!-- Toolbar -->
   <div class="toolbar">
     <a href="./게시글목록페이지.html">
-    <img src="./img/folder_icon_transparent.png" class="folder-icon" alt="folder icon" />
+      <img src="./img/folder_icon_transparent.png" class="folder-icon" alt="folder icon" />
     </a>
     <div class="toolbar-center">목록:전체</div>
-    <button class="register-button">등록</button>
+    <button class="register-button" onclick="saveDiary()">등록</button>
   </div>
 
-  <!-- 제목 입력 -->
+  <!-- 날짜 표시 -->
   <div class="border-t border-gray-300 my-2"></div>
+  <div id="diary-date" class="px-4 text-sm text-gray-500 my-2"></div>
+
+  <!-- 제목 -->
   <div class="mb-4 px-4">
     <input id="title" type="text" placeholder="제목을 입력하세요"
            class="w-full px-4 py-2 rounded-md bg-[#f6f4f4] focus:outline-none" />
   </div>
 
-  <!-- 본문 입력 영역 -->
+  <!-- 본문 -->
   <div class="input-area" onclick="activateEditor()" id="inputArea">
     <div class="input-placeholder" id="placeholder">이곳에 입력하세요</div>
   </div>
 
   <!-- Script -->
   <script>
+    // 날짜 표시
+    const dateEl = document.getElementById("diary-date");
+    const now = new Date();
+    dateEl.textContent = now.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "short",
+    });
+
     // 에디터 활성화
     function activateEditor() {
       const inputArea = document.getElementById("inputArea");
-      inputArea.innerHTML = "";
+      if (inputArea.querySelector("textarea")) return;
 
+      inputArea.innerHTML = "";
       const textarea = document.createElement("textarea");
       textarea.placeholder = "이곳에 입력하세요";
       textarea.autofocus = true;
-
       inputArea.appendChild(textarea);
     }
 
-    // 햄버거 메뉴 기능
-    const menuButton = document.getElementById('menu-button');
-    const sideMenu = document.getElementById('side-menu');
-    const closeButton = document.getElementById('close-button');
-    const overlay = document.getElementById('overlay');
+    // 저장 (localStorage 예시)
+    function saveDiary() {
+      const title = document.getElementById("title").value;
+      const content = document.querySelector("textarea")?.value || "";
 
-    menuButton.addEventListener('click', () => {
-      sideMenu.classList.remove('-translate-x-full');
-      overlay.classList.remove('hidden');
+      const diary = {
+        title,
+        content,
+        createdAt: new Date().toISOString(),
+      };
+
+      const diaries = JSON.parse(localStorage.getItem("diaries")) || [];
+      diaries.push(diary);
+      localStorage.setItem("diaries", JSON.stringify(diaries));
+
+      alert("일기가 저장되었습니다.");
+      location.href = "./게시글목록페이지.html";
+    }
+
+    // 햄버거 메뉴
+    const menuButton = document.getElementById("menu-button");
+    const sideMenu = document.getElementById("side-menu");
+    const closeButton = document.getElementById("close-button");
+    const overlay = document.getElementById("overlay");
+
+    menuButton.addEventListener("click", () => {
+      sideMenu.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
     });
 
     function closeMenu() {
-      sideMenu.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
+      sideMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
     }
 
-    closeButton.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
+    closeButton.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
   </script>
 </body>
 </html>
