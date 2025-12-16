@@ -16,7 +16,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 80px);
+      min-height: calc(100vh - 80px);
       background-color: #d5e8d4;
       padding: 30px;
     }
@@ -43,8 +43,15 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 1rem;
+      box-sizing: border-box;
     }
 
+    .login-box input:focus {
+      outline: none;
+      border-color: #a7cba9;
+      box-shadow: 0 0 0 2px rgba(167, 203, 169, 0.4);
+    }
+    
     .login-box button {
       width: 100%;
       padding: 12px;
@@ -54,10 +61,41 @@
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.2s;
     }
 
     .login-box button:hover {
       background-color: #f0dc97;
+    }
+
+    .login-box button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .error-msg {
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      text-align: left;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
     }
   </style>
 </head>
@@ -66,17 +104,10 @@
   <!-- Header -->
   <header class="bg-[#a7cba9] top-0 z-10">
     <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-8 py-5">
-      
-      <!-- Left: 빈 공간 -->
       <div></div>
-
-      <!-- Center: Logo -->
       <div class="flex justify-center">
-        <!-- <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span> -->
-         <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</a>
+        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</a>
       </div>
-
-      <!-- Right: 로그인 링크 -->
       <div class="flex justify-end text-sm pr-0">
         <a href="./로그인페이지.html" class="text-white px-3 py-1 transition hover:underline">로그인</a>
       </div>
@@ -85,62 +116,160 @@
 
   <!-- 회원가입 폼 -->
   <div class="login-wrapper">
-    <div class="login-box">
+    <form class="login-box" id="signupForm">
       <h2>회원가입</h2>
-      <input type="text" placeholder="아이디" id="userId" />
-      <input type="password" placeholder="비밀번호" id="userPw" />
-      <input type="password" placeholder="비밀번호 확인" id="userPwCheck" />
-      <button onclick="handleSignup()">회원가입</button>
-    </div>
+      
+      <label for="userId" class="sr-only">아이디</label>
+      <input 
+        type="text" 
+        placeholder="아이디" 
+        id="userId" 
+        name="username"
+        autocomplete="username"
+        required
+      />
+      
+      <label for="userPw" class="sr-only">비밀번호</label>
+      <input 
+        type="password" 
+        placeholder="비밀번호" 
+        id="userPw"  
+        name="password"
+        autocomplete="new-password"
+        required
+      />
+      
+      <label for="userPwCheck" class="sr-only">비밀번호 확인</label>
+      <input 
+        type="password" 
+        placeholder="비밀번호 확인" 
+        id="userPwCheck"  
+        name="passwordCheck"
+        autocomplete="new-password"
+        required
+      />
+
+      <p id="errorMsg" class="error-msg" role="alert"></p>
+      
+      <button type="submit" id="submitBtn">회원가입</button>
+    </form>
   </div>
 
   <script>
-    async function handleSignup() {
-  const id = document.getElementById('userId').value.trim();
-  const pw = document.getElementById('userPw').value;
-  const pwCheck = document.getElementById('userPwCheck').value;
+    // DOM이 로드된 후 실행
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('signupForm');
+      const errorMsg = document.getElementById('errorMsg');
+      const submitBtn = document.getElementById('submitBtn');
 
-  if (!id || !pw || !pwCheck) {
-    alert("모든 항목을 입력해주세요.");
-    return;
-  }
+      // Form 제출 이벤트 리스너
+      form.addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-  if (pw !== pwCheck) {
-    alert("비밀번호가 일치하지 않습니다.");
-    return;
-  }
+        const id = document.getElementById('userId').value.trim();
+        const pw = document.getElementById('userPw').value;
+        const pwCheck = document.getElementById('userPwCheck').value;
 
-  try {
-    const response = await fetch('/api/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: id,
-        password: pw
-      })
-    });
+        // 에러 메시지 초기화
+        hideError();
 
-    const result = await response.json();
+        // 유효성 검사
+        if (!id || !pw || !pwCheck) {
+          showError("모든 항목을 입력해주세요.");
+          return;
+        }
 
-    if (response.ok) {
-      alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
-      window.location.href = './로그인페이지.html'; // 성공 시 로그인 페이지로 이동
-    } else {
-      alert(result.message || '회원가입에 실패했습니다.');
-    }
+        if (id.length < 4) {
+          showError("아이디는 4자 이상이어야 합니다.");
+          document.getElementById('userId').focus();
+          return;
+        }
 
-  } catch (error) {
-    console.error('오류 발생:', error);
-    alert('서버 오류로 회원가입에 실패했습니다.');
-  }
-}
-    // Enter 키 눌렀을 때 로그인 실행
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        handleSignup();
+        if (pw.length < 6) {
+          showError("비밀번호는 6자 이상이어야 합니다.");
+          document.getElementById('userPw').focus();
+          return;
+        }
+
+        if (pw !== pwCheck) {
+          showError("비밀번호가 일치하지 않습니다.");
+          document.getElementById('userPwCheck').focus();
+          return;
+        }
+
+        // 버튼 비활성화
+        submitBtn.disabled = true;
+        submitBtn.textContent = '처리 중...';
+
+        try {
+          // 실제 백엔드 API 호출 (백엔드가 있는 경우)
+          /*
+          const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: id, password: pw })
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
+            window.location.href = './로그인페이지.html';
+          } else {
+            showError(result.message || "회원가입에 실패했습니다.");
+          }
+          */
+
+          // localStorage를 사용한 임시 구현 (데모용)
+          const users = JSON.parse(localStorage.getItem('users') || '[]');
+          
+          // 중복 아이디 체크
+          if (users.some(user => user.username === id)) {
+            showError("이미 존재하는 아이디입니다.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = '회원가입';
+            return;
+          }
+
+          // 새 사용자 추가
+          users.push({ username: id, password: pw });
+          localStorage.setItem('users', JSON.stringify(users));
+
+          alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
+          
+          // 로그인 페이지로 이동 (또는 홈페이지로)
+          // window.location.href = './로그인페이지.html';
+          
+          // 데모를 위해 폼 리셋
+          form.reset();
+          alert('localStorage에 저장되었습니다. 실제로는 로그인 페이지로 이동합니다.');
+
+        } catch (error) {
+          console.error('Error:', error);
+          showError("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = '회원가입';
+        }
+      });
+
+      // 에러 메시지 표시 함수
+      function showError(message) {
+        errorMsg.textContent = message;
+        errorMsg.classList.add('show');
       }
+
+      // 에러 메시지 숨김 함수
+      function hideError() {
+        errorMsg.textContent = '';
+        errorMsg.classList.remove('show');
+      }
+
+      // 입력 시 에러 메시지 자동 제거
+      const inputs = form.querySelectorAll('input');
+      inputs.forEach(input => {
+        input.addEventListener('input', hideError);
+      });
     });
   </script>
 
