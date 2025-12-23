@@ -7,36 +7,25 @@
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      background-color: #f6f4f4;
-      margin: 0;
-    }
-
-    .login-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: calc(100vh - 80px);
-      background-color: #d5e8d4;
-      padding: 30px;
-    }
-
-    .login-box {
+    /* 회원가입 박스 */
+    .signup-box {
       background-color: #f6f4f4;
       padding: 40px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
       text-align: center;
     }
-
-    .login-box h2 {
+    
+    .signup-box h2 {
       margin-bottom: 30px;
       font-size: 2rem;
+      font-weight: 600;
     }
-
-    .login-box input {
+    
+    /* 입력 필드 */
+    .input-field {
       width: 100%;
       padding: 12px 15px;
       margin-bottom: 20px;
@@ -44,15 +33,17 @@
       border-radius: 5px;
       font-size: 1rem;
       box-sizing: border-box;
+      transition: all 0.2s;
     }
-
-    .login-box input:focus {
+    
+    .input-field:focus {
       outline: none;
       border-color: #a7cba9;
       box-shadow: 0 0 0 2px rgba(167, 203, 169, 0.4);
     }
     
-    .login-box button {
+    /* 제출 버튼 */
+    .submit-btn {
       width: 100%;
       padding: 12px;
       background-color: #f6e8b1;
@@ -61,18 +52,19 @@
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: all 0.2s;
     }
-
-    .login-box button:hover {
+    
+    .submit-btn:hover {
       background-color: #f0dc97;
     }
-
-    .login-box button:disabled {
+    
+    .submit-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
-
+    
+    /* 에러 메시지 */
     .error-msg {
       color: #dc2626;
       font-size: 0.875rem;
@@ -81,88 +73,94 @@
       text-align: left;
       display: none;
     }
-
+    
     .error-msg.show {
       display: block;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
+    @media (max-width: 480px) {
+      .signup-box {
+        padding: 30px 20px;
+      }
+      
+      .signup-box h2 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
-<body>
-
+<body class="m-0 bg-[#f6f4f4]">
+  
   <!-- Header -->
-  <header class="bg-[#a7cba9] top-0 z-10">
+  <header class="bg-[#a7cba9]">
     <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-8 py-5">
       <div></div>
       <div class="flex justify-center">
-        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</a>
+        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
+          Alyssum
+        </a>
       </div>
-      <div class="flex justify-end text-sm pr-0">
-        <a href="./로그인페이지.html" class="text-white px-3 py-1 transition hover:underline">로그인</a>
+      <div class="flex justify-end text-sm">
+        <a href="./로그인페이지.html" class="text-white px-3 py-1 transition hover:underline">
+          로그인
+        </a>
       </div>
     </div>
   </header>
 
   <!-- 회원가입 폼 -->
-  <div class="login-wrapper">
-    <form class="login-box" id="signupForm">
+  <div class="flex justify-center items-center min-h-[calc(100vh-80px)] bg-[#d5e8d4] p-8">
+    <form class="signup-box" id="signupForm">
       <h2>회원가입</h2>
-      
+
       <label for="userId" class="sr-only">아이디</label>
-      <input 
-        type="text" 
-        placeholder="아이디" 
-        id="userId" 
+      <input
+        type="text"
+        placeholder="아이디"
+        id="userId"
         name="username"
+        class="input-field"
         autocomplete="username"
         required
       />
-      
+
       <label for="userPw" class="sr-only">비밀번호</label>
-      <input 
-        type="password" 
-        placeholder="비밀번호" 
-        id="userPw"  
+      <input
+        type="password"
+        placeholder="비밀번호"
+        id="userPw"
         name="password"
+        class="input-field"
         autocomplete="new-password"
         required
       />
-      
+
       <label for="userPwCheck" class="sr-only">비밀번호 확인</label>
-      <input 
-        type="password" 
-        placeholder="비밀번호 확인" 
-        id="userPwCheck"  
+      <input
+        type="password"
+        placeholder="비밀번호 확인"
+        id="userPwCheck"
         name="passwordCheck"
+        class="input-field"
         autocomplete="new-password"
         required
       />
 
       <p id="errorMsg" class="error-msg" role="alert"></p>
-      
-      <button type="submit" id="submitBtn">회원가입</button>
+
+      <button type="submit" id="submitBtn" class="submit-btn">
+        회원가입
+      </button>
     </form>
   </div>
 
   <script>
-    // DOM이 로드된 후 실행
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('signupForm');
       const errorMsg = document.getElementById('errorMsg');
       const submitBtn = document.getElementById('submitBtn');
 
-      // Form 제출 이벤트 리스너
+      // Form 제출 이벤트
       form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -175,59 +173,39 @@
 
         // 유효성 검사
         if (!id || !pw || !pwCheck) {
-          showError("모든 항목을 입력해주세요.");
+          showError('모든 항목을 입력해주세요.');
           return;
         }
 
         if (id.length < 4) {
-          showError("아이디는 4자 이상이어야 합니다.");
+          showError('아이디는 4자 이상이어야 합니다.');
           document.getElementById('userId').focus();
           return;
         }
 
         if (pw.length < 6) {
-          showError("비밀번호는 6자 이상이어야 합니다.");
+          showError('비밀번호는 6자 이상이어야 합니다.');
           document.getElementById('userPw').focus();
           return;
         }
 
         if (pw !== pwCheck) {
-          showError("비밀번호가 일치하지 않습니다.");
+          showError('비밀번호가 일치하지 않습니다.');
           document.getElementById('userPwCheck').focus();
           return;
         }
 
-        // 버튼 비활성화
+        // 로딩 상태
         submitBtn.disabled = true;
         submitBtn.textContent = '처리 중...';
 
         try {
-          // 실제 백엔드 API 호출 (백엔드가 있는 경우)
-          /*
-          const response = await fetch('/api/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: id, password: pw })
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
-            window.location.href = './로그인페이지.html';
-          } else {
-            showError(result.message || "회원가입에 실패했습니다.");
-          }
-          */
-
-          // localStorage를 사용한 임시 구현 (데모용)
+          // localStorage 사용 (임시 구현)
           const users = JSON.parse(localStorage.getItem('users') || '[]');
-          
+
           // 중복 아이디 체크
           if (users.some(user => user.username === id)) {
-            showError("이미 존재하는 아이디입니다.");
-            submitBtn.disabled = false;
-            submitBtn.textContent = '회원가입';
+            showError('이미 존재하는 아이디입니다.');
             return;
           }
 
@@ -237,29 +215,25 @@
 
           alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
           
-          // 로그인 페이지로 이동 (또는 홈페이지로)
-          // window.location.href = './로그인페이지.html';
-          
-          // 데모를 위해 폼 리셋
-          form.reset();
-          alert('localStorage에 저장되었습니다. 실제로는 로그인 페이지로 이동합니다.');
+          // 로그인 페이지로 이동
+          window.location.href = './로그인페이지.html';
 
         } catch (error) {
           console.error('Error:', error);
-          showError("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+          showError('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = '회원가입';
         }
       });
 
-      // 에러 메시지 표시 함수
+      // 에러 메시지 표시
       function showError(message) {
         errorMsg.textContent = message;
         errorMsg.classList.add('show');
       }
 
-      // 에러 메시지 숨김 함수
+      // 에러 메시지 숨김
       function hideError() {
         errorMsg.textContent = '';
         errorMsg.classList.remove('show');
@@ -270,18 +244,9 @@
       inputs.forEach(input => {
         input.addEventListener('input', hideError);
       });
-    });
 
-    // 키보드 접근성: Enter/Space로 토글
-        button.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.click();
-          }
-        });
-    // 키보드 접근성: 폼 내 탭 순서 관리
+      // 키보드 접근성
       form.addEventListener('keydown', function(e) {
-        // Shift+Tab으로 역순 이동 지원
         if (e.key === 'Tab') {
           const focusableElements = form.querySelectorAll(
             'input:not([disabled]), button:not([disabled])'
@@ -298,7 +263,7 @@
           }
         }
       });
+    });
   </script>
-
 </body>
 </html>
