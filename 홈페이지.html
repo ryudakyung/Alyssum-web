@@ -7,53 +7,123 @@
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      background-color: #f6f4f4;
-      margin: 0;
-    }
+    /* 반복되는 컴포넌트만 커스텀 CSS */
+    
+    /* Hero 이미지 */
     .hero-image {
+      width: 16rem;
+      height: 10rem;
+      object-fit: cover;
       border-radius: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* CTA 버튼 */
+    .cta-btn {
+      padding: 12px 40px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .cta-btn-primary {
+      background-color: #2C2E33;
+      color: white;
+    }
+    
+    .cta-btn-primary:hover {
+      background-color: #1a1b1f;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .cta-btn-secondary {
+      background-color: #7f7e7a;
+      color: white;
+    }
+    
+    .cta-btn-secondary:hover {
+      background-color: #6a6966;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .cta-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(44, 46, 51, 0.3);
+    }
+    
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .hero-image {
+        width: 12rem;
+        height: 8rem;
+      }
+      
+      .cta-btn {
+        padding: 10px 30px;
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
-<body class="flex flex-col bg-[#f6f4f4]">
-
+<body class="m-0 bg-[#f6f4f4]">
+  
   <!-- Header -->
-    <header class="bg-[#a7cba9] sticky top-0 z-10">
+  <header class="bg-[#a7cba9] sticky top-0 z-10">
     <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-8 py-4">
-      
       <!-- Left: Empty -->
       <div></div>
 
       <!-- Center: Logo -->
       <div class="flex justify-center">
-        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
+        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
+          Alyssum
+        </a>
       </div>
 
       <!-- Right: Auth Buttons -->
       <div class="flex justify-end items-center text-sm space-x-2">
-        <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">회원가입</a>
+        <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">
+          회원가입
+        </a>
         <span class="text-white select-none">/</span>
-        <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">로그인</a>
+        <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">
+          로그인
+        </a>
       </div>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="p-20 flex flex-col items-center">
-    <img src="./img/Alyssum.png" alt="Alyssum Flower" class="mb-6 w-64 h-40 object-cover hero-image" />
-    <div class="text-center mb-4">
-      <h1 class="text-sm text-gray-800 mb-1 leading-relaxed">
+  <main class="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-6 py-20">
+    <img
+      src="./img/Alyssum.png"
+      alt="Alyssum Flower"
+      class="hero-image"
+    />
+    
+    <div class="text-center mb-8">
+      <h1 class="text-lg md:text-xl text-gray-800 leading-relaxed">
         단순하지만 편리한,<br />
         따뜻하고 편안한,<br />
-        <span class="text-gray-800 font-bold">알리섬</span>
+        <span class="font-bold">알리섬</span>
       </h1>
     </div>
-      <div class="flex justify-end items-center text-sm space-x-2">
-    <a href="./로그인페이지.html" class="bg-[#2C2E33] text-white text-sm px-10 py-1 transition  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">시작하기</a>
-    <a href="./소개페이지.html" class="bg-[#7f7e7a] text-white text-sm px-10 py-1 transition">소개보기</a>
-      </div>
-  </section>
+    
+    <div class="flex flex-col sm:flex-row gap-3 items-center">
+      <a href="./로그인페이지.html" class="cta-btn cta-btn-primary">
+        시작하기
+      </a>
+      <a href="./소개페이지.html" class="cta-btn cta-btn-secondary">
+        소개보기
+      </a>
+    </div>
+  </main>
+
 </body>
 </html>
-
