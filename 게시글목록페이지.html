@@ -4,8 +4,12 @@
     <meta charset="UTF-8" />
     <title>Alyssum - 게시글 목록</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./css/font.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/font.css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <style>
       body {
@@ -20,39 +24,44 @@
         padding: 20px;
         border-radius: 8px;
         text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       }
 
       h2 {
         margin-top: 0;
         font-size: 24px;
         font-weight: bold;
+        color: #374151;
+        margin-bottom: 20px;
       }
 
       .post-button {
         display: block;
-        width: 90%;
+        width: 100%;
         margin: 10px auto;
-        padding: 12px;
-        border: 1px solid #999;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
         border-radius: 8px;
         background-color: white;
         cursor: pointer;
         text-align: left;
-        transition: background-color 0.2s;
+        transition: all 0.2s;
       }
 
       .post-button:hover {
-        background-color: #f0f0f0;
+        background-color: #f9fafb;
+        border-color: #a7cba9;
       }
 
       .post-title {
         font-size: 16px;
         font-weight: 600;
+        color: #1f2937;
       }
 
       .post-date {
         font-size: 12px;
-        color: #777;
+        color: #9ca3af;
         margin-top: 4px;
       }
 
@@ -62,48 +71,74 @@
 
       .page-number {
         display: inline-block;
-        padding: 5px 10px;
-        border: 1px solid #999;
+        padding: 5px 12px;
+        border: 1px solid #a7cba9;
         border-radius: 4px;
         background-color: white;
+        color: #a7cba9;
+        font-weight: bold;
       }
     </style>
   </head>
 
   <body>
     <!-- Header -->
-    <header class="bg-[#a7cba9] top-0 z-10">
+    <header class="bg-[#a7cba9] sticky top-0 z-10">
       <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-4">
         <div class="flex items-center">
-          <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          <button
+            id="menu-button"
+            class="text-white focus:outline-none"
+            aria-label="메뉴"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
         </div>
 
         <div class="flex justify-center">
-          <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
+          <a href="./마이페이지.html" class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</a>
         </div>
 
         <div class="flex justify-end text-sm">
-          <a href="./마이페이지.html" class="text-white px-4 py-1 hover:underline">마이페이지</a>
+          <a
+            href="./마이페이지.html"
+            class="text-white px-4 py-1 hover:underline"
+            >마이페이지</a
+          >
         </div>
       </div>
     </header>
 
     <!-- Overlay -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+    <div
+      id="overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"
+    ></div>
 
     <!-- Side Menu -->
-    <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
+    <div
+      id="side-menu"
+      class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg"
+    >
       <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
 
       <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
-        <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
-        <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
-        <a href="./설정페이지.html" class="px-4 py-2 hover:bg-gray-100">설정페이지</a>
-        <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
+        <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100 rounded">게시글 목록</a>
+        <a href="./작성페이지.html" class="px-4 py-2 hover:bg-gray-100 rounded ">일기 쓰기</a>
+        <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100 rounded ">마이페이지</a>
+        <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100 rounded">문의사항</a>
       </nav>
     </div>
 
@@ -118,7 +153,22 @@
     </div>
 
     <script>
-      // 사이드 메뉴
+      // Firebase 설정
+      const firebaseConfig = {
+        apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
+        authDomain: "alyssum-24112.firebaseapp.com",
+        databaseURL: "https://alyssum-24112-default-rtdb.firebaseio.com",
+        projectId: "alyssum-24112",
+        storageBucket: "alyssum-24112.firebasestorage.app",
+        messagingSenderId: "618441085953",
+        appId: "1:618441085953:web:e457579f5774e063801c00"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const auth = firebase.auth();
+
+      // 사이드 메뉴 제어
       const menuButton = document.getElementById("menu-button");
       const sideMenu = document.getElementById("side-menu");
       const closeButton = document.getElementById("close-button");
@@ -137,42 +187,59 @@
       closeButton.addEventListener("click", closeMenu);
       overlay.addEventListener("click", closeMenu);
 
-      // 게시글 목록
+      // 게시글 목록 불러오기
       const postList = document.getElementById("post-list");
-      const diaries = JSON.parse(localStorage.getItem("diaries")) || [];
 
-      if (diaries.length === 0) {
-        postList.innerHTML =
-          "<p class='text-gray-500 mt-6'>게시글이 없습니다.</p>";
-      } else {
-        diaries
-          .map((diary, index) => ({ diary, index }))
-          .reverse()
-          .forEach(({ diary, index }) => {
-            const btn = document.createElement("button");
-            btn.className = "post-button";
+      function loadPosts(user) {
+        postList.innerHTML = "<p class='text-gray-400 mt-6'>게시글을 불러오는 중...</p>";
 
-            const title =
-              diary.title && diary.title.trim()
-                ? diary.title
-                : "제목 없음";
+        db.collection("posts")
+          .where("uid", "==", user.uid)
+          .orderBy("createdAt", "desc")
+          .get()
+          .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+              postList.innerHTML = "<p class='text-gray-400 mt-6'>작성된 게시글이 없습니다.</p>";
+              return;
+            }
 
-            const date = diary.createdAt
-              ? new Date(diary.createdAt).toLocaleDateString("ko-KR")
-              : "";
+            postList.innerHTML = ""; 
 
-            btn.innerHTML = `
-              <div class="post-title">${title}</div>
-              <div class="post-date">${date}</div>
-            `;
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              const btn = document.createElement("button");
+              btn.className = "post-button";
 
-            btn.addEventListener("click", () => {
-              location.href = `게시글상세페이지.html?id=${index}`;
+              const title = data.headline && data.headline.trim() ? data.headline : "제목 없음";
+              const date = data.createdAt ? data.createdAt.toDate().toLocaleDateString("ko-KR") : "날짜 정보 없음";
+
+              btn.innerHTML = `
+                <div class="post-title">${title}</div>
+                <div class="post-date">${date}</div>
+              `;
+
+              btn.addEventListener("click", () => {
+                location.href = `게시글상세페이지.html?id=${doc.id}`;
+              });
+
+              postList.appendChild(btn);
             });
-
-            postList.appendChild(btn);
+          })
+          .catch((error) => {
+            console.error("Error getting documents: ", error);
+            postList.innerHTML = "<p class='text-red-400 mt-6'>데이터를 불러오는 중 오류가 발생했습니다.</p>";
           });
       }
+
+      // 로그인 상태 확인 및 초기화
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          loadPosts(user);
+        } else {
+          postList.innerHTML = "<p class='text-gray-500 mt-6'>로그인이 필요한 서비스입니다.</p>";
+          // 마이페이지나 로그인 페이지로 리다이렉트가 필요할 수 있습니다.
+        }
+      });
     </script>
   </body>
 </html>
