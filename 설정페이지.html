@@ -2,136 +2,277 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Alyysum - 설정</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alyssum</title>
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      background-color: #f6f4f4;
-      margin: 0;
-    }
-
-    header {
-      background-color: #a7cba9;
-      padding: 20px;
-      text-align: center;
-    }
-
-    header span {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #f6f4f4;
-    }
-
-    .settings-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 60px 40px;
-    }
-
-    .settings-title {
-      font-size: 3rem;
-      font-weight: 600;
-      color: #111;
-      margin-bottom: 60px;
-    }
-
-    .settings-list {
+    /* 반복되는 컴포넌트만 커스텀 CSS */
+    
+    /* 페이지 메인 영역 */
+    .intro-page {
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 80px);
+      gap: 3rem;
+      padding: 3rem 2rem;
+      box-sizing: border-box;
     }
-
-    .settings-link {
-      font-size: 1.5rem;
-      color: #222;
+    
+    /* 상단 섹션: 이미지 + 텍스트 */
+    .top-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+    
+    /* 이미지 영역 */
+    .intro-photo {
+      flex: 0 0 400px;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .intro-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* 텍스트 섹션 */
+    .intro-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+    }
+    
+    .intro-caption {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #6b7280;
+    }
+    
+    /* 헤드라인 */
+    .intro-headline {
+      font-size: 20px;
+      color: #374151;
+      line-height: 1.8;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    
+    /* 개발자 프로필 */
+    .dev-profile {
+      position: relative;
+      width: 144px;
+      height: 144px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .dev-profile:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .dev-profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .dev-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .dev-profile:hover .dev-overlay {
+      opacity: 1;
+    }
+    
+    .dev-name {
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    /* 문의하기 버튼 */
+    .contact-btn {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      font-size: 14px;
+      color: #374151;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 12px 20px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
       text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      z-index: 50;
     }
-
-    .settings-link:hover {
-      text-decoration: underline;
+    
+    .contact-btn:hover {
+      color: #111827;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    }
+    
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .top-section {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      
+      .intro-photo {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .intro-text {
+        text-align: center;
+      }
+      
+      .intro-caption {
+        font-size: 16px;
+      }
+      
+      .intro-headline {
+        font-size: 18px;
+      }
+      
+      .dev-profile {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .dev-name {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
-<body>
-
+<body class="m-0 bg-white">
+  
   <!-- Header -->
-  <header class="bg-[#a7cba9] top-0 z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-0 py-0.25">
-      
-      <!-- Left: Hamburger Menu -->
-      <div class="flex items-center">
-        <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Center: Logo -->
+  <header class="bg-[#a7cba9] sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-8 py-4">
+      <div></div>
       <div class="flex justify-center">
-        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyysum</span>
+        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
+          Alyssum
+        </a>
       </div>
-
-      <!-- Right: My Page -->
-      <div class="flex justify-end text-sm pr-0">
-        <a href="./마이페이지.html" class="text-white px-3 py-1 transition hover:underline">마이페이지</a>
+      <div class="flex justify-end items-center text-sm space-x-2">
+        <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">회원가입</a>
+        <span class="text-white select-none">/</span>
+        <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">로그인</a>
       </div>
     </div>
   </header>
 
-  <!-- Overlay -->
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
-
-  <!-- Side Menu -->
-  <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
-    
-    <!-- Close Button -->
-    <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
-
-    <!-- Menu Links -->
-    <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
-      <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
-      <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
-      <a href="./설정페이지.html" class="px-4 py-2 hover:bg-gray-100">설정페이지</a>
-      <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
-    </nav>
-  </div>
-
   <!-- Main Content -->
-  <main class="settings-container">
-    <h1 class="settings-title">설정</h1>
-    <div class="settings-list">
-      <a href="./개인정보확인페이지.html" class="settings-link">- 개인정보 확인</a>
-      <!-- <a href="./개발중.html" class="settings-link">- 알림설정</a>
-      <a href="./개발중.html" class="settings-link">- 세부설정</a> -->
-      <a href="./문의사항.html" class="settings-link">- 문의</a>
-    </div>
+  <main class="intro-page">
+    
+    <!-- 상단: 이미지 + 소개글 -->
+    <section class="top-section">
+      <div class="intro-photo">
+        <img src="./img/Alyssum.png" alt="알리섬 흰 꽃" />
+      </div>
+
+      <div class="intro-text">
+        <div class="intro-caption">
+          <p>| 1학년 12반이었던 사람들이 모여 만든 의미있는 웹페이지입니다. |</p>
+          <p>| 1월 12일에 탄생한 알리섬입니다. |</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 헤드라인 -->
+    <section>
+      <p class="intro-headline">
+        이 곳은 자유롭게 글을 쓰고,<br />
+        또 저장해 놓을 수 있는,<br />
+        알리섬을 컨셉으로 한 일기장 입니다.
+      </p>
+    </section>
+
+    <!-- 개발자 소개 -->
+    <section class="flex flex-col items-center gap-12 mt-8">
+      
+      <!-- 프론트엔드 -->
+      <div>
+        <h2 class="intro-headline mb-6">프론트엔드</h2>
+        <div class="flex justify-center gap-8 flex-wrap">
+          <div class="dev-profile">
+            <img src="./img/128.jpg" alt="김도언" />
+            <div class="dev-overlay">
+              <span class="dev-name">김도언</span>
+            </div>
+          </div>
+
+          <div class="dev-profile">
+            <img src="./img/77.jpg" alt="류다경" />
+            <div class="dev-overlay">
+              <span class="dev-name">류다경</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 백엔드 -->
+      <div>
+        <h2 class="intro-headline mb-6">백엔드</h2>
+        <div class="flex justify-center gap-8 flex-wrap">
+          <div class="dev-profile">
+            <img src="./img/gh.jpg" alt="이기현" />
+            <div class="dev-overlay">
+              <span class="dev-name">이기현</span>
+            </div>
+          </div>
+
+          <div class="dev-profile">
+            <img src="./img/722.jpg" alt="임준형" />
+            <div class="dev-overlay">
+              <span class="dev-name">임준형</span>
+            </div>
+          </div>
+
+          <div class="dev-profile">
+            <img src="./img/518.jpg" alt="조민서" />
+            <div class="dev-overlay">
+              <span class="dev-name">조민서</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <!-- Script -->
-  <script>
-    const menuButton = document.getElementById('menu-button');
-    const sideMenu = document.getElementById('side-menu');
-    const closeButton = document.getElementById('close-button');
-    const overlay = document.getElementById('overlay');
+  <!-- 문의하기 버튼 -->
+  <a href="./문의사항.html" class="contact-btn">문의하기</a>
 
-    menuButton.addEventListener('click', () => {
-      sideMenu.classList.remove('-translate-x-full');
-      overlay.classList.remove('hidden');
-    });
-
-    function closeMenu() {
-      sideMenu.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
-    }
-
-    closeButton.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
-  </script>
-  
 </body>
 </html>
-
-
