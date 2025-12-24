@@ -6,238 +6,279 @@
   <title>Alyssum - 마이페이지</title>
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDK (Compat 모드 사용) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #f6f4f4;
-    }
-
-    header {
-      background-color: #a7cba9;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-    }
-
+    /* 프로필 섹션 스타일 */
     .profile-section {
-      display: flex;
-      padding: 2rem;
-      background-color: white;
-    }
-
-    .profile-image {
-      width: 200px;
-      height: 200px;
-      background-color: #ccc;
-      margin-right: 2rem;
+      @apply bg-white p-10 rounded-xl shadow-sm max-w-4xl mx-auto my-10;
     }
 
     .profile-info h2 {
-      margin-bottom: 0.5rem;
+      @apply text-3xl font-bold mb-3 text-gray-800;
     }
 
     .profile-info p {
-      margin-bottom: 0.3rem;
+      @apply text-gray-600 mb-1;
     }
 
-    .recent-posts {
-      background-color: #eee;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .recent-posts h3 {
-      margin-bottom: 1rem;
-    }
-
-    .post-list {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .post {
+    /* 일기 카드 - 노란색 포스트잇 스타일 */
+    .diary-card {
       background-color: #fff9b0;
-      padding: 1rem;
-      width: 180px;
-    }
-
-    .post-image {
+      border-radius: 8px;
+      padding: 20px;
       width: 100%;
-      height: 120px;
-      background-color: #bbb;
-      margin-bottom: 0.5rem;
+      max-width: 18rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s;
+      cursor: pointer;
+      position: relative;
     }
 
-    .features {
-      background-color: #b2e2b2;
-      text-align: center;
-      padding: 2rem;
+    .diary-card:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(-4px);
     }
 
-    .features h3 {
-      margin-bottom: 1.5rem;
-    }
-
-    .feature-icons {
+    /* 썸네일 영역 스타일 */
+    .diary-thumbnail {
+      width: 100%;
+      height: 140px;
+      background-color: #e5e7eb;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border-radius: 4px;
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-    }
-
-    .feature-icons div {
-      display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: center;
     }
 
-    footer {
-      background-color: #b2e2b2;
-      padding: 2rem;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+    .diary-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .contact, .hours {
-      width: 45%;
+    .diary-card h4 {
+      @apply font-bold text-lg mb-2 text-center truncate text-gray-800;
     }
 
-    .map {
-      width: 45%;
-      background-color: #a3d9a3;
-      height: 100px;
-      text-align: center;
-      line-height: 100px;
+    .diary-card p {
+      @apply text-sm text-gray-700 text-center leading-relaxed line-clamp-3;
     }
 
-    .footer-note {
-      text-align: center;
-      padding: 1rem;
-      background-color: #94d494;
-      font-weight: bold;
+    .diary-date {
+      @apply text-xs text-gray-500 mt-4 text-right;
+    }
+
+    /* 새글쓰기 섹션 */
+    .write-section {
+      @apply bg-[#b2e2b2] py-16 mt-10;
+    }
+
+    .write-btn {
+      @apply flex flex-col items-center gap-2 text-gray-700 transition-transform hover:scale-110;
+    }
+
+    .write-icon {
+      @apply text-7xl font-light text-gray-600 leading-none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .loading-msg {
+      @apply text-gray-500 py-20 text-center w-full;
     }
   </style>
 </head>
-<body>
-
+<body class="bg-[#f6f4f4]">
   <!-- Header -->
-  <header class="bg-[#a7cba9] top-0 z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-1">
-      <!-- Hamburger Menu -->
-      <div class="flex items-center">
-        <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Center: Logo -->
-      <div class="flex justify-center">
-        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
-      </div>
+  <header class="bg-[#a7cba9] sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-5">
+      <button id="menu-button" class="text-white focus:outline-none">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <a href="./홈페이지.html" class="text-2xl font-bold text-white tracking-wider">Alyssum</a>
+      <button id="logout-button" class="text-white text-sm hover:underline">로그아웃</button>
     </div>
   </header>
 
-  <!-- 오버레이 & 사이드 메뉴 -->
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
-  <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
-    <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
-    <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
-      <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
-      <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
-      <a href="./설정페이지.html" class="px-4 py-2 hover:bg-gray-100">설정페이지</a>
-      <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
-    </nav>
-  </div>
-
-  <!-- 프로필 섹션 -->
-  <section class="profile-section">
-    <div class="profile-image"></div>
-    <div class="profile-info">
-      <h2>이름</h2>
-      <p>이 페이지에 관한 설명</p>
+  <!-- Side Menu Overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[60]"></div>
+  <nav id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-[70] shadow-2xl">
+    <button id="close-button" class="text-[#a7cba9] text-2xl m-4 hover:bg-gray-100 w-10 h-10 rounded">✕</button>
+    <div class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg font-medium">
+      <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-white hover:shadow-sm rounded transition-all">게시글 목록</a>
+      <a href="./마이페이지.html" class="px-4 py-2 bg-white shadow-sm rounded font-bold">마이페이지</a>
+      <a href="./작성페이지.html" class="px-4 py-2 hover:bg-gray-100 rounded ">일기 쓰기</a>
+      <a href="./문의사항.html" class="px-4 py-2 hover:bg-white hover:shadow-sm rounded transition-all">문의사항</a>
     </div>
-  </section>
+  </nav>
 
-  <!-- 최근 게시글 -->
-  <section class="recent-posts" id="recentPostsSection">
-    <h3>최근 일기</h3>
-    <div class="post-list" id="postList"></div>
-  </section>
+  <main>
+    <!-- 프로필 섹션 -->
+    <section class="profile-section animate-fade-in">
+      <div class="profile-info text-center md:text-left">
+        <h2 id="userName">사용자님</h2>
+        <p id="userEmail" class="text-lg">불러오는 중...</p>
+        <p id="userStats" class="mt-4 inline-block bg-[#d5e8d4] px-4 py-1 rounded-full text-sm font-bold text-[#4a7a4a]">작성한 글: 0개</p>
+      </div>
+    </section>
 
-  <!-- 기능 영역 -->
-  <section class="features">
+    <!-- 최근 일기 섹션 -->
+    <section class="py-12 px-6">
+      <h3 class="text-2xl font-bold mb-10 text-center text-gray-800">최근 일기</h3>
+      <div id="loadingPosts" class="loading-msg">게시글을 불러오는 중...</div>
+      <div id="postList" class="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
+        <!-- JS로 렌더링 -->
+      </div>
+    </section>
 
-    <div class="feature-icons">
-      <div>
-        <a href="./작성페이지.html">
-          <img class='w-8 h-8 object-fit: contain;' src="./img/ChatGPT Image 2025년 8월 29일 오후 02_56_47.png" alt="">
-        </a>
-        <a href="./작성페이지.html">
-          새글쓰기
+    <!-- 새글쓰기 섹션 -->
+    <section class="write-section">
+      <div class="text-center">
+        <a href="./작성페이지.html" class="write-btn inline-block">
+          <div class="write-icon">+</div>
+          <span class="text-xl font-bold">새 일기 쓰기</span>
         </a>
       </div>
-      <!-- <div>💾<br>데이터 백업</div>
-      <div>⏫<br>데이터 불러오기</div>
-    </div> -->
-  </section>
+    </section>
+  </main>
 
-  <!-- Footer 영역은 필요 시 추가 -->
-
-  <!-- 스크립트 -->
   <script>
-    // 햄버거 메뉴 동작
-    const menuButton = document.getElementById('menu-button');
-    const sideMenu = document.getElementById('side-menu');
-    const closeButton = document.getElementById('close-button');
-    const overlay = document.getElementById('overlay');
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
+      authDomain: "alyssum-24112.firebaseapp.com",
+      databaseURL: "https://alyssum-24112-default-rtdb.firebaseio.com",
+      projectId: "alyssum-24112",
+      storageBucket: "alyssum-24112.firebasestorage.app",
+      messagingSenderId: "618441085953",
+      appId: "1:618441085953:web:e457579f5774e063801c00",
+    };
 
-    menuButton.addEventListener('click', () => {
-      sideMenu.classList.remove('-translate-x-full');
-      overlay.classList.remove('hidden');
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // 메뉴 제어
+    const menuButton = document.getElementById("menu-button");
+    const sideMenu = document.getElementById("side-menu");
+    const closeButton = document.getElementById("close-button");
+    const overlay = document.getElementById("overlay");
+
+    const toggleMenu = (isOpen) => {
+      sideMenu.classList.toggle("-translate-x-full", !isOpen);
+      overlay.classList.toggle("hidden", !isOpen);
+    };
+
+    menuButton.addEventListener("click", () => toggleMenu(true));
+    closeButton.addEventListener("click", () => toggleMenu(false));
+    overlay.addEventListener("click", () => toggleMenu(false));
+
+    // 로그아웃
+    document.getElementById("logout-button").addEventListener("click", () => {
+      if (confirm("로그아웃 하시겠습니까?")) {
+        auth.signOut().then(() => {
+          window.location.href = "./로그인페이지.html";
+        });
+      }
     });
 
-    function closeMenu() {
-      sideMenu.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
+    // 프로필 정보 표시
+    function displayUserProfile(user) {
+      const userName = document.getElementById("userName");
+      const userEmail = document.getElementById("userEmail");
+      const namePrefix = user.email ? user.email.split("@")[0] : "사용자";
+      userName.textContent = `${namePrefix}님, 안녕하세요!`;
+      userEmail.textContent = user.email;
     }
 
-    closeButton.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
+    // 최근 게시글 불러오기 (Firestore 연동 및 썸네일 복구)
+    async function loadRecentPosts(user) {
+      const postList = document.getElementById("postList");
+      const loadingMsg = document.getElementById("loadingPosts");
+      const userStats = document.getElementById("userStats");
 
-    // 최근 일기 렌더링
-    const diaryData = [
-      { title: "가장최근 제목", content: "일기 내용입니다. 오늘은 날씨가 맑았어요." },
-      { title: "그전꺼 제목", content: "이전 일기 내용입니다. 점심에 김밥을 먹었어요." },
-      { title: "그전꺼 제목", content: "아무튼 잘 마무리했습니다. 굿굿굿." }
-    ];
+      try {
+        // [수정] 복합 인덱스 오류 방지: orderBy를 빼고 데이터를 가져온 후 메모리에서 정렬합니다.
+        const querySnapshot = await db.collection("posts")
+          .where("uid", "==", user.uid)
+          .get();
 
-    const postList = document.getElementById('postList');
-    const section = document.getElementById('recentPostsSection');
+        loadingMsg.classList.add("hidden");
+        userStats.textContent = `작성한 글: ${querySnapshot.size}개`;
 
-    if (diaryData.length === 0) {
-      section.style.display = 'none';
-    } else {
-      diaryData.forEach(post => {
-        const div = document.createElement('div');
-        div.className = 'post';
-        div.innerHTML = `
-          <div class="post-image"></div>
-          <strong>${post.title}</strong>
-          <p>${post.content}</p>
-        `;
-        postList.appendChild(div);
-      });
+        if (querySnapshot.empty) {
+          postList.innerHTML = `
+            <div class="text-center py-10 opacity-60">
+              <p class="text-lg mb-4">아직 작성된 일기가 없습니다.</p>
+              <p class="text-sm">오늘의 마음을 첫 기록으로 남겨보세요. ✨</p>
+            </div>
+          `;
+          return;
+        }
+
+        // 데이터를 배열로 변환하고 최신순 정렬 (메모리 정렬로 인덱스 불필요)
+        const posts = [];
+        querySnapshot.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
+        posts.sort((a, b) => (b.createdAt?.toDate() || 0) - (a.createdAt?.toDate() || 0));
+
+        // 최근 3개만 표시
+        const recentThree = posts.slice(0, 3);
+
+        postList.innerHTML = "";
+        recentThree.forEach((data) => {
+          const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleDateString("ko-KR", {
+            year: 'numeric', month: 'long', day: 'numeric'
+          }) : "날짜 정보 없음";
+
+          const card = document.createElement("div");
+          card.className = "diary-card animate-fade-in";
+          
+          card.innerHTML = `
+            <div class="diary-thumbnail">
+              ${data.imageUrl 
+                ? `<img src="${data.imageUrl}" alt="썸네일" onerror="this.parentElement.innerHTML='<span class=\'text-gray-400 text-xs\'>이미지 로드 실패</span>'">` 
+                : `<div class="text-gray-400 text-xs">사진이 없어요</div>`
+              }
+            </div>
+            <h4>${data.headline || "제목 없음"}</h4>
+            <p>${data.content || "내용이 없습니다."}</p>
+            <div class="diary-date">${dateStr}</div>
+          `;
+
+          card.addEventListener("click", () => {
+            window.location.href = `./게시글상세페이지.html?id=${data.id}`;
+          });
+
+          postList.appendChild(card);
+        });
+      } catch (error) {
+        console.error("데이터 로드 오류:", error);
+        loadingMsg.textContent = "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.";
+      }
     }
+
+    // 인증 상태 감시
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        displayUserProfile(user);
+        loadRecentPosts(user);
+      } else {
+        window.location.href = "./로그인페이지.html";
+      }
+    });
   </script>
 </body>
 </html>
