@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Alyssum</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="./css/font.css" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: #f6f4f4;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .post-header {
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .post-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .post-meta {
+      font-size: 14px;
+      color: #999;
+    }
+
+    .post-content {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #555;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 200px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-back {
+      background-color: #a7cba9;
+      color: white;
+    }
+
+    .btn-back:hover {
+      background-color: #96ba98;
+    }
+
+    .btn-delete {
+      background-color: #ff6b6b;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background-color: #ff5252;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: #999;
+      font-size: 18px;
+    }
+
+    .error {
+      text-align: center;
+      padding: 60px;
+      color: #ff6b6b;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="bg-[#a7cba9] top-0 z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-4">
+      <div class="flex items-center">
+        <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex justify-center">
+        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
+      </div>
+
+      <div class="flex justify-end text-sm">
+        <a href="./마이페이지.html" class="text-white px-4 py-1 hover:underline">마이페이지</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+
+  <!-- Side Menu -->
+  <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
+    <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
+
+    <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
+      <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
+      <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
+        <a href="./작성페이지.html" class="px-4 py-2 hover:bg-gray-100 rounded ">일기 쓰기</a>
+      <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div id="loading" class="loading">게시글을 불러오는 중...</div>
+    <div id="error" class="error" style="display: none;">게시글을 찾을 수 없습니다.</div>
+    
+    <div id="postContent" style="display: none;">
+      <div class="post-header">
+        <div class="post-title" id="postTitle">제목</div>
+        <div class="post-meta" id="postMeta">2024.01.01</div>
+      </div>
+      
+      <div class="post-content" id="postBody">내용</div>
+      
+      <div class="button-group">
+        <button class="btn btn-back" onclick="goBack()">← 목록으로</button>
+        <button class="btn btn-delete" id="deleteBtn" style="display: none;">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    // Firebase 초기화
+    const firebaseConfig = {
+      apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
+      authDomain: "alyssum-24112.firebaseapp.com",
+      databaseURL: "https://alyssum-24112-default-rtdb.firebaseio.com",
+      projectId: "alyssum-24112",
+      storageBucket: "alyssum-24112.firebasestorage.app",
+      messagingSenderId: "618441085953",
+      appId: "1:618441085953:web:e457579f5774e063801c00"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // 햄버거 메뉴
+    const menuButton = document.getElementById("menu-button");
+    const sideMenu = document.getElementById("side-menu");
+    const closeButton = document.getElementById("close-button");
+    const overlay = document.getElementById("overlay");
+
+    menuButton.addEventListener("click", () => {
+      sideMenu.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+    });
+
+    function closeMenu() {
+      sideMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    }
+
+    closeButton.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    // 목록으로 돌아가기
+    function goBack() {
+      window.location.href = "./게시글목록페이지.html";
+    }
+
+    // URL에서 게시글 ID 가져오기
+    function getPostId() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('id');
+    }
+
+    // 게시글 불러오기
+    function loadPost() {
+      const postId = getPostId();
+      
+      if (!postId) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').textContent = '잘못된 접근입니다.';
+        return;
+      }
+
+      db.collection("posts").doc(postId).get()
+        .then((doc) => {
+          document.getElementById('loading').style.display = 'none';
+
+          if (!doc.exists) {
+            document.getElementById('error').style.display = 'block';
+            return;
+          }
+
+          const data = doc.data();
+          const user = auth.currentUser;
+
+          // 게시글 내용 표시
+          document.getElementById('postTitle').textContent = data.headline || '제목 없음';
+          document.getElementById('postBody').textContent = data.content || '';
+          
+          // 날짜 표시
+          if (data.createdAt) {
+            const date = data.createdAt.toDate();
+            const dateStr = date.toLocaleDateString('ko-KR') + ' ' + 
+                           date.toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'});
+            document.getElementById('postMeta').textContent = dateStr;
+          }
+
+          document.getElementById('postContent').style.display = 'block';
+
+          // 내가 쓴 글이면 삭제 버튼만 표시
+          if (user && user.uid === data.uid) {
+            document.getElementById('deleteBtn').style.display = 'inline-block';
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading post:", error);
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('error').textContent = '게시글을 불러오는 중 오류가 발생했습니다.';
+        });
+    }
+
+    // 게시글 삭제
+    document.getElementById('deleteBtn').addEventListener('click', () => {
+      if (!confirm('정말 삭제하시겠습니까?')) {
+        return;
+      }
+
+      const postId = getPostId();
+      
+      db.collection("posts").doc(postId).delete()
+        .then(() => {
+          alert('게시글이 삭제되었습니다.');
+          window.location.href = "./게시글목록페이지.html";
+        })
+        .catch((error) => {
+          console.error("Error deleting post:", error);
+          alert('삭제 중 오류가 발생했습니다.');
+        });
+    });
+
+    // 인증 상태 확인 후 게시글 불러오기
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log('로그인된 사용자:', user.uid);
+        loadPost();
+      } else {
+        console.log('로그인되지 않음');
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').textContent = '로그인이 필요합니다.';
+      }
+    });
+  </script>
+</body>
+</html>
