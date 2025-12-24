@@ -1,196 +1,236 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alyssum - 문의 사항</title>
-  <link rel="stylesheet" href="./css/font.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      margin: 0;
-      background-color: #ffffff;
-      color: #333;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alyssum</title>
+    <link rel="stylesheet" href="./css/font.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        background-color: #ffffff;
+        color: #333;
+      }
 
-    header {
-      background-color: #a7cba9;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-    }
+      header {
+        background-color: #a7cba9;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+      }
 
-    footer {
-      background-color: #a7cba9;
-      padding: 25px 0;
-      text-align: center;
-      font-weight: bold;
-      font-size: 14px;
-    }
+      footer {
+        background-color: #a7cba9;
+        padding: 25px 0;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+      }
 
-    .main-content {
-      text-align: center;
-      padding: 60px 20px;
-    }
+      .main-content {
+        text-align: center;
+        padding: 60px 20px;
+      }
 
-    .main-content h1 {
-      font-size: 40px;
-      margin-bottom: 20px;
-    }
+      .main-content h1 {
+        font-size: 40px;
+        margin-bottom: 20px;
+      }
 
-    .main-content p {
-      font-size: 25px;
-      color: #555;
-      margin-bottom: 40px;
-    }
+      .main-content p {
+        font-size: 25px;
+        color: #555;
+        margin-bottom: 40px;
+      }
 
-    .team-container {
-      display: flex;
-      justify-content: center;
-      gap: 100px;
-      font-size: 16px;
-    }
+      .team {
+        text-align: left;
+      }
 
-    .team {
-      text-align: left;
-    }
+      .team h3 {
+        font-size: 25px;
+        margin-bottom: 10px;
+      }
 
-    .team h3 {
-      font-size: 25px;
-      margin-bottom: 10px;
-    }
+      .team ul {
+        list-style: none;
+        padding: 0;
+      }
 
-    .team ul {
-      list-style: none;
-      padding: 0;
-    }
+      .team li {
+        margin-bottom: 20px;
+      }
 
-    .team li {
-      margin-bottom: 20px;
-    }
+      .email {
+        font-size: 20px;
+        color: #666;
+        cursor: pointer;
+      }
 
-    .email {
-      font-size: 20px;
-      color: #666;
-      cursor: pointer;
-    }
-
-    .email:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="bg-[#a7cba9] top-0 z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-1">
-      <!-- Hamburger Menu -->
-      <div class="flex items-center">
-        <button id="menu-button" class="text-white focus:outline-none" aria-label="메뉴">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-      <!-- Center: Logo -->
-      <div class="flex justify-center">
-        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
-      </div>
-      <!-- Right: Auth Buttons -->
-      <div class="flex justify-end text-sm pr-2">
-        <a href="./마이페이지.html" class="text-white px-3 py-1 transition hover:underline">마이페이지</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Overlay -->
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
-
-  <!-- Side Menu -->
-  <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg">
-    <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
-    <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
-      <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100">게시글 목록</a>
-      <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100">마이페이지</a>
-      <a href="./설정페이지.html" class="px-4 py-2 hover:bg-gray-100">설정페이지</a>
-      <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100">문의사항</a>
-    </nav>
-  </div>
-
-  <!-- Main Content -->
-  <section class="p-20 flex flex-col items-center">
-    <div class="main-content">
-      <h1>문의 사항</h1>
-      <p>문의 사항은 아래 E-mail로 보내주세요.</p>
-
-      <div class="team-container">
-        <div class="team">
-          <h3>프론트엔드 팀</h3>
-          <ul>
-            <li>
-              <strong>김도언</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411203@angok.hs.kr</span>
-            </li>
-            <li>
-              <strong>류다경</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411218@angok.hs.kr</span>
-            </li>
-          </ul>
+      .email:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-[#a7cba9] top-0 z-10">
+      <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-1">
+        <!-- Hamburger Menu -->
+        <div class="flex items-center">
+          <button
+            id="menu-button"
+            class="text-white focus:outline-none"
+            aria-label="메뉴"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
         </div>
-        <div class="team">
-          <h3>백엔드 팀</h3>
-          <ul>
-            <li>
-              <strong>조민서</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411223@angok.hs.kr</span>
-            </li>
-            <li>
-              <strong>임준형</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411212@angok.hs.kr</span>
-            </li>
-            <li>
-              <strong>이기현</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411207@angok.hs.kr</span>
-            </li>
-          </ul>
+        <!-- Center: Logo -->
+        <div class="flex justify-center">
+          <span class="text-2xl font-bold tracking-wide text-white select-none"
+            >Alyssum</span
+          >
+        </div>
+        <!-- Right: Auth Buttons -->
+        <div class="flex justify-end text-sm pr-2">
+          <a
+            href="./마이페이지.html"
+            class="text-white px-3 py-1 transition hover:underline"
+            >마이페이지</a
+          >
         </div>
       </div>
+    </header>
+
+    <!-- Overlay -->
+    <div
+      id="overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"
+    ></div>
+
+    <!-- Side Menu -->
+    <div
+      id="side-menu"
+      class="fixed top-0 left-0 h-full w-64 bg-[#f6f4f4] transform -translate-x-full transition-transform duration-300 z-40 shadow-lg"
+    >
+      <button id="close-button" class="text-[#a7cba9] text-2xl m-4">✕</button>
+      <nav class="flex flex-col space-y-4 mt-8 ml-6 text-[#a7cba9] text-lg">
+        <a href="./게시글목록페이지.html" class="px-4 py-2 hover:bg-gray-100"
+          >게시글 목록</a
+        >
+        <a href="./마이페이지.html" class="px-4 py-2 hover:bg-gray-100"
+          >마이페이지</a
+        >
+        <a href="./작성페이지.html" class="px-4 py-2 hover:bg-gray-100 rounded"
+          >일기 쓰기</a
+        >
+        <a href="./문의사항.html" class="px-4 py-2 hover:bg-gray-100"
+          >문의사항</a
+        >
+      </nav>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer>24112 Web Development Project</footer>
+    <!-- Main Content -->
+    <section class="p-20 flex flex-col items-center">
+      <div class="main-content">
+        <h1>문의 사항</h1>
+        <p>문의 사항은 아래 E-mail로 보내주세요.</p>
 
-  <!-- Scripts -->
-  <script>
-    const menuButton = document.getElementById('menu-button');
-    const sideMenu = document.getElementById('side-menu');
-    const closeButton = document.getElementById('close-button');
-    const overlay = document.getElementById('overlay');
+        <div class="team-container">
+          <div class="team">
+            <h3>프론트엔드 팀</h3>
+            <ul>
+              <li>
+                <strong>김도언</strong><br />
+                <span class="email" onclick="copyEmail(this)"
+                  >2411203@angok.hs.kr</span
+                >
+              </li>
+              <li>
+                <strong>류다경</strong><br />
+                <span class="email" onclick="copyEmail(this)"
+                  >2411218@angok.hs.kr</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="team">
+            <h3>백엔드 팀</h3>
+            <ul>
+              <li>
+                <strong>조민서</strong><br />
+                <span class="email" onclick="copyEmail(this)"
+                  >2411223@angok.hs.kr</span
+                >
+              </li>
+              <li>
+                <strong>임준형</strong><br />
+                <span class="email" onclick="copyEmail(this)"
+                  >2411212@angok.hs.kr</span
+                >
+              </li>
+              <li>
+                <strong>이기현</strong><br />
+                <span class="email" onclick="copyEmail(this)"
+                  >2411207@angok.hs.kr</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    menuButton.addEventListener('click', () => {
-      sideMenu.classList.remove('-translate-x-full');
-      overlay.classList.remove('hidden');
-    });
+    <!-- Footer -->
+    <footer>24112 Web Development Project</footer>
 
-    function closeMenu() {
-      sideMenu.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
-    }
+    <!-- Scripts -->
+    <script>
+      const menuButton = document.getElementById("menu-button");
+      const sideMenu = document.getElementById("side-menu");
+      const closeButton = document.getElementById("close-button");
+      const overlay = document.getElementById("overlay");
 
-    closeButton.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
-
-    // 이메일 복사 함수
-    function copyEmail(element) {
-      const email = element.textContent;
-      navigator.clipboard.writeText(email).then(() => {
-        alert(`📋 이메일 주소가 복사되었습니다: ${email}`);
-      }).catch(err => {
-        alert("복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
+      menuButton.addEventListener("click", () => {
+        sideMenu.classList.remove("-translate-x-full");
+        overlay.classList.remove("hidden");
       });
-    }
-  </script>
-</body>
+
+      function closeMenu() {
+        sideMenu.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      }
+
+      closeButton.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+
+      // 이메일 복사 함수
+      function copyEmail(element) {
+        const email = element.textContent;
+        navigator.clipboard
+          .writeText(email)
+          .then(() => {
+            alert(`📋 이메일 주소가 복사되었습니다: ${email}`);
+          })
+          .catch((err) => {
+            alert("복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
+          });
+      }
+    </script>
+  </body>
 </html>
