@@ -110,159 +110,154 @@
 
   <!-- 회원가입 폼 -->
   <div class="flex justify-center items-center min-h-[calc(100vh-80px)] bg-[#d5e8d4] p-8">
-    <form class="signup-box" id="signupForm">
-      <h2>회원가입</h2>
+    <div class="signup-box">
+      <form id="signupForm">
+        <h2>회원가입</h2>
 
-      <label for="userId" class="sr-only">아이디</label>
-      <input
-        type="text"
-        placeholder="아이디"
-        id="userId"
-        name="username"
-        class="input-field"
-        autocomplete="username"
-        required
-      />
+        <label for="userEmail" class="sr-only">이메일 (아이디)</label>
+        <input
+          type="email"
+          placeholder="이메일 주소"
+          id="userEmail"
+          name="email"
+          class="input-field"
+          autocomplete="email"
+          required
+        />
 
-      <label for="userPw" class="sr-only">비밀번호</label>
-      <input
-        type="password"
-        placeholder="비밀번호"
-        id="userPw"
-        name="password"
-        class="input-field"
-        autocomplete="new-password"
-        required
-      />
+        <label for="userPw" class="sr-only">비밀번호</label>
+        <input
+          type="password"
+          placeholder="비밀번호 (6자 이상)"
+          id="userPw"
+          name="password"
+          class="input-field"
+          autocomplete="new-password"
+          required
+        />
 
-      <label for="userPwCheck" class="sr-only">비밀번호 확인</label>
-      <input
-        type="password"
-        placeholder="비밀번호 확인"
-        id="userPwCheck"
-        name="passwordCheck"
-        class="input-field"
-        autocomplete="new-password"
-        required
-      />
+        <label for="userPwCheck" class="sr-only">비밀번호 확인</label>
+        <input
+          type="password"
+          placeholder="비밀번호 확인"
+          id="userPwCheck"
+          name="passwordCheck"
+          class="input-field"
+          autocomplete="new-password"
+          required
+        />
 
-      <p id="errorMsg" class="error-msg" role="alert"></p>
+        <p id="errorMsg" class="error-msg" role="alert"></p>
 
-      <button type="submit" id="submitBtn" class="submit-btn">
-        회원가입
-      </button>
-    </form>
+        <button type="submit" id="submitBtn" class="submit-btn">
+          회원가입
+        </button>
+      </form>
+    </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('signupForm');
-      const errorMsg = document.getElementById('errorMsg');
-      const submitBtn = document.getElementById('submitBtn');
+  <!-- Firebase SDK 로드 및 로직 연동 -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-      // Form 제출 이벤트
-      form.addEventListener('submit', async function(event) {
-        event.preventDefault();
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
+      authDomain: "alyssum-24112.firebaseapp.com",
+      projectId: "alyssum-24112",
+      storageBucket: "alyssum-24112.firebasestorage.app",
+      messagingSenderId: "618441085953",
+      appId: "1:618441085953:web:e457579f5774e063801c00"
+    };
 
-        const id = document.getElementById('userId').value.trim();
-        const pw = document.getElementById('userPw').value;
-        const pwCheck = document.getElementById('userPwCheck').value;
+    // Firebase 초기화
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        // 에러 메시지 초기화
-        hideError();
+    const signupForm = document.getElementById('signupForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const submitBtn = document.getElementById('submitBtn');
 
-        // 유효성 검사
-        if (!id || !pw || !pwCheck) {
-          showError('모든 항목을 입력해주세요.');
-          return;
-        }
+    // 에러 표시 함수
+    function showError(message) {
+      errorMsg.textContent = message;
+      errorMsg.classList.add('show');
+    }
 
-        if (id.length < 4) {
-          showError('아이디는 4자 이상이어야 합니다.');
-          document.getElementById('userId').focus();
-          return;
-        }
+    // 에러 숨김 함수
+    function hideError() {
+      errorMsg.textContent = '';
+      errorMsg.classList.remove('show');
+    }
 
-        if (pw.length < 6) {
-          showError('비밀번호는 6자 이상이어야 합니다.');
-          document.getElementById('userPw').focus();
-          return;
-        }
+    // 입력창에 변화가 생기면 에러 메시지 삭제
+    signupForm.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', hideError);
+    });
 
-        if (pw !== pwCheck) {
-          showError('비밀번호가 일치하지 않습니다.');
-          document.getElementById('userPwCheck').focus();
-          return;
-        }
+    // 폼 제출 핸들러
+    signupForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // 기본 제출 동작 막기
+      
+      const email = document.getElementById('userEmail').value.trim();
+      const password = document.getElementById('userPw').value;
+      const passwordCheck = document.getElementById('userPwCheck').value;
 
-        // 로딩 상태
-        submitBtn.disabled = true;
-        submitBtn.textContent = '처리 중...';
+      hideError();
 
-        try {
-          // localStorage 사용 (임시 구현)
-          const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-          // 중복 아이디 체크
-          if (users.some(user => user.username === id)) {
-            showError('이미 존재하는 아이디입니다.');
-            return;
-          }
-
-          // 새 사용자 추가
-          users.push({ username: id, password: pw });
-          localStorage.setItem('users', JSON.stringify(users));
-
-          alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
-          
-          // 로그인 페이지로 이동
-          window.location.href = './로그인페이지.html';
-
-        } catch (error) {
-          console.error('Error:', error);
-          showError('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = '회원가입';
-        }
-      });
-
-      // 에러 메시지 표시
-      function showError(message) {
-        errorMsg.textContent = message;
-        errorMsg.classList.add('show');
+      // 1. 클라이언트 측 유효성 검사
+      if (!email || !password || !passwordCheck) {
+        showError('모든 항목을 입력해주세요.');
+        return;
       }
 
-      // 에러 메시지 숨김
-      function hideError() {
-        errorMsg.textContent = '';
-        errorMsg.classList.remove('show');
+      if (password.length < 6) {
+        showError('비밀번호는 최소 6자 이상이어야 합니다.');
+        return;
       }
 
-      // 입력 시 에러 메시지 자동 제거
-      const inputs = form.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.addEventListener('input', hideError);
-      });
+      if (password !== passwordCheck) {
+        showError('비밀번호가 일치하지 않습니다.');
+        return;
+      }
 
-      // 키보드 접근성
-      form.addEventListener('keydown', function(e) {
-        if (e.key === 'Tab') {
-          const focusableElements = form.querySelectorAll(
-            'input:not([disabled]), button:not([disabled])'
-          );
-          const firstElement = focusableElements[0];
-          const lastElement = focusableElements[focusableElements.length - 1];
+      // 2. 버튼 비활성화 (중복 클릭 방지)
+      submitBtn.disabled = true;
+      submitBtn.textContent = '처리 중...';
 
-          if (e.shiftKey && document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus();
-          } else if (!e.shiftKey && document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
+      // 3. Firebase 회원가입 시도
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        console.log("회원가입 성공:", user);
+        alert(`환영합니다, ${email}님! 회원가입이 완료되었습니다.`);
+        
+        // 성공 시 로그인 페이지나 메인 페이지로 이동
+        window.location.href = './로그인페이지.html';
+
+      } catch (error) {
+        console.error("Firebase 에러 코드:", error.code);
+        
+        // Firebase 에러 한국어 처리
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            showError('이미 사용 중인 이메일입니다.');
+            break;
+          case 'auth/invalid-email':
+            showError('유효하지 않은 이메일 형식입니다.');
+            break;
+          case 'auth/weak-password':
+            showError('비밀번호가 너무 취약합니다.');
+            break;
+          default:
+            showError('회원가입 도중 오류가 발생했습니다: ' + error.message);
         }
-      });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '회원가입';
+      }
     });
   </script>
 </body>
