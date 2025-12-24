@@ -1,159 +1,158 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alyssum - 문의 사항</title>
-  <link rel="stylesheet" href="./css/font.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      margin: 0;
-      background-color: #ffffff;
-      color: #333;
-    }
-
-    header {
-      background-color: #a7cba9;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-    }
-
-    footer {
-      background-color: #a7cba9;
-      padding: 25px 0;
-      text-align: center;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .main-content {
-      text-align: center;
-      padding: 60px 20px;
-    }
-
-    .main-content h1 {
-      font-size: 40px;
-      margin-bottom: 20px;
-    }
-
-    .main-content p {
-      font-size: 25px;
-      color: #555;
-      margin-bottom: 40px;
-    }
-
-    .team-container {
-      display: flex;
-      justify-content: center;
-      gap: 100px;
-      font-size: 16px;
-    }
-
-    .team {
-      text-align: left;
-    }
-
-    .team h3 {
-      font-size: 25px;
-      margin-bottom: 10px;
-    }
-
-    .team ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .team li {
-      margin-bottom: 20px;
-    }
-
-    .email {
-      font-size: 20px;
-      color: #666;
-      cursor: pointer;
-    }
-
-    .email:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="bg-[#a7cba9] top-0 z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-1">
-      <!-- Left: 빈 공간 또는 햄버거 메뉴 -->
-    <div></div>
-    <!-- Center: Logo -->
-      <div class="flex justify-center">
-        <span class="text-2xl font-bold tracking-wide text-white select-none">Alyssum</span>
-      </div>
-      <!-- Right: Auth Buttons -->
-    <div class="flex justify-end items-center text-sm space-x-2">
-      <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">회원가입</a>
-      <span class="text-white select-none">/</span>
-      <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">로그인</a>
-    </div>
-    </div>
-  </header>
-  <!-- Main Content -->
-  <section class="p-20 flex flex-col items-center">
-    <div class="main-content">
-      <h1>문의 사항</h1>
-      <p>문의 사항은 아래 E-mail로 보내주세요.</p>
-
-      <div class="team-container">
-        <div class="team">
-          <h3>프론트엔드 팀</h3>
-          <ul>
-            <li>
-              <strong>김도언</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411203@angok.hs.kr</span>
-            </li>
-            <li>
-              <strong>류다경</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411218@angok.hs.kr</span>
-            </li>
-          </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alyssum</title>
+    <link rel="stylesheet" href="./css/font.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="m-0 bg-white text-gray-800">
+    
+    <!-- Header -->
+    <header class="bg-[#a7cba9] sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-5">
+        <!-- Left: 빈 공간 -->
+        <div></div>
+        
+        <!-- Center: Logo -->
+        <div class="flex justify-center">
+          <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none">
+            Alyssum
+          </a>
         </div>
-        <div class="team">
-          <h3>백엔드 팀</h3>
-          <ul>
-            <li>
-              <strong>조민서</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411223@angok.hs.kr</span>
-            </li>
-            <li>
-              <strong>임준형</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411212@angok.hs.kr</span>
-            </li>
-            <li>
-              <strong>이기현</strong><br />
-              <span class="email" onclick="copyEmail(this)">2411207@angok.hs.kr</span>
-            </li>
-          </ul>
+        
+        <!-- Right: Auth Buttons -->
+        <div class="flex justify-end items-center text-sm space-x-2">
+          <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">
+            회원가입
+          </a>
+          <span class="text-white select-none">/</span>
+          <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">
+            로그인
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Footer -->
-  <footer>24112 Web Development Project</footer>
+    <!-- Main Content -->
+    <main class="py-16 px-5 flex flex-col items-center min-h-[calc(100vh-180px)]">
+      <div class="text-center max-w-5xl w-full">
+        <!-- Title -->
+        <h1 class="text-4xl md:text-5xl font-bold mb-5">문의 사항</h1>
+        <p class="text-xl md:text-2xl text-gray-600 mb-10 md:mb-16">
+          문의 사항은 아래 E-mail로 보내주세요.
+        </p>
 
-  <!-- Scripts -->
-  <script>
-    // 이메일 복사 함수
-    function copyEmail(element) {
-      const email = element.textContent;
-      navigator.clipboard.writeText(email).then(() => {
-        alert(`📋 이메일 주소가 복사되었습니다: ${email}`);
-      }).catch(err => {
-        alert("복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
+        <!-- Team Container -->
+        <div class="flex flex-col md:flex-row justify-center gap-8 md:gap-24 text-base">
+          
+          <!-- Frontend Team -->
+          <div class="text-left">
+            <h3 class="text-2xl font-semibold mb-4">프론트엔드 팀</h3>
+            <ul class="list-none p-0">
+              <li class="mb-5">
+                <strong class="block mb-1">김도언</strong>
+                <button 
+                  class="text-lg text-gray-600 cursor-pointer hover:underline focus:outline-none focus:ring-2 focus:ring-[#a7cba9] rounded px-1"
+                  onclick="copyEmail(this)"
+                  aria-label="김도언 이메일 복사"
+                >
+                  2411203@angok.hs.kr
+                </button>
+              </li>
+              <li class="mb-5">
+                <strong class="block mb-1">류다경</strong>
+                <button 
+                  class="text-lg text-gray-600 cursor-pointer hover:underline focus:outline-none focus:ring-2 focus:ring-[#a7cba9] rounded px-1"
+                  onclick="copyEmail(this)"
+                  aria-label="류다경 이메일 복사"
+                >
+                  2411218@angok.hs.kr
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Backend Team -->
+          <div class="text-left">
+            <h3 class="text-2xl font-semibold mb-4">백엔드 팀</h3>
+            <ul class="list-none p-0">
+              <li class="mb-5">
+                <strong class="block mb-1">조민서</strong>
+                <button 
+                  class="text-lg text-gray-600 cursor-pointer hover:underline focus:outline-none focus:ring-2 focus:ring-[#a7cba9] rounded px-1"
+                  onclick="copyEmail(this)"
+                  aria-label="조민서 이메일 복사"
+                >
+                  2411223@angok.hs.kr
+                </button>
+              </li>
+              <li class="mb-5">
+                <strong class="block mb-1">임준형</strong>
+                <button 
+                  class="text-lg text-gray-600 cursor-pointer hover:underline focus:outline-none focus:ring-2 focus:ring-[#a7cba9] rounded px-1"
+                  onclick="copyEmail(this)"
+                  aria-label="임준형 이메일 복사"
+                >
+                  2411212@angok.hs.kr
+                </button>
+              </li>
+              <li class="mb-5">
+                <strong class="block mb-1">이기현</strong>
+                <button 
+                  class="text-lg text-gray-600 cursor-pointer hover:underline focus:outline-none focus:ring-2 focus:ring-[#a7cba9] rounded px-1"
+                  onclick="copyEmail(this)"
+                  aria-label="이기현 이메일 복사"
+                >
+                  2411207@angok.hs.kr
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#a7cba9] py-6 text-center font-bold text-sm text-white">
+      24112 Web Development Project
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      // 이메일 복사 함수
+      function copyEmail(element) {
+        const email = element.textContent.trim();
+        
+        navigator.clipboard.writeText(email)
+          .then(() => {
+            // 성공 피드백
+            const originalText = element.textContent;
+            element.textContent = '✓ 복사됨!';
+            element.classList.add('text-green-600', 'font-semibold');
+            
+            // 2초 후 원래대로
+            setTimeout(() => {
+              element.textContent = originalText;
+              element.classList.remove('text-green-600', 'font-semibold');
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error('복사 실패:', err);
+            alert('복사에 실패했습니다. 브라우저 설정을 확인해주세요.');
+          });
+      }
+
+      // 키보드 접근성: Enter/Space로 이메일 복사
+      document.querySelectorAll('button[onclick^="copyEmail"]').forEach(button => {
+        button.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            button.click();
+          }
+        });
       });
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
