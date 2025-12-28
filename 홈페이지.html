@@ -74,25 +74,25 @@
 <body class="m-0 bg-[#f6f4f4]">
   
   <!-- Header -->
-  <header class="bg-[#a7cba9] sticky top-0 z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-8 py-4">
-      <!-- Left: Empty -->
-      <div></div>
+  <header class="bg-[#a7cba9] sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
+      <!-- 왼쪽 영역 (공백 유지용) -->
+      <div class="hidden md:block flex-1"></div>
 
-      <!-- Center: Logo -->
-      <div class="flex justify-center">
-        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
+      <!-- 중앙 로고 -->
+      <div class="flex-none md:flex-1 flex justify-center">
+        <a href="./홈페이지.html" class="text-xl md:text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
           Alyssum
         </a>
       </div>
 
-      <!-- Right: Auth Buttons -->
-      <div class="flex justify-end items-center text-sm space-x-2">
-        <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">
+      <!-- 오른쪽 메뉴: 한 줄 유지 핵심 부분 -->
+      <div class="flex-1 flex justify-end items-center text-[11px] xs:text-xs md:text-sm space-x-1 md:space-x-2 whitespace-nowrap">
+        <a href="./회원가입.html" class="text-white px-1 py-1 transition hover:underline">
           회원가입
         </a>
-        <span class="text-white select-none">/</span>
-        <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">
+        <span class="text-white/70 select-none">/</span>
+        <a href="./로그인페이지.html" class="text-white px-1 py-1 transition hover:underline">
           로그인
         </a>
       </div>
