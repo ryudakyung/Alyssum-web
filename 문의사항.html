@@ -16,7 +16,6 @@
       header {
         background-color: #a7cba9;
         color: white;
-        padding: 20px;
         text-align: center;
         font-size: 24px;
       }
@@ -27,6 +26,7 @@
         text-align: center;
         font-weight: bold;
         font-size: 14px;
+        color: white;
       }
 
       .main-content {
@@ -72,14 +72,29 @@
       .email:hover {
         text-decoration: underline;
       }
+      
+      /* 모바일 최적화 헤더 대응 */
+      @media (max-width: 640px) {
+        .header-container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        .logo-text {
+          font-size: 1.25rem;
+        }
+        .auth-text {
+          /* 모바일에서 마이페이지 텍스트가 너무 커지지 않도록 조정 */
+          font-size: 0.85rem; 
+        }
+      }
     </style>
   </head>
   <body>
-    <!-- Header -->
-    <header class="bg-[#a7cba9] top-0 z-10">
-      <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-1">
-        <!-- Hamburger Menu -->
-        <div class="flex items-center">
+    <!-- Header: 모바일 깨짐 방지를 위해 flex 구조로 변경 -->
+    <header class="bg-[#a7cba9] sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 header-container">
+        <!-- Left: Hamburger Menu -->
+        <div class="flex-1 flex items-center">
           <button
             id="menu-button"
             class="text-white focus:outline-none"
@@ -101,16 +116,18 @@
           </button>
         </div>
         <!-- Center: Logo -->
-        <div class="flex justify-center">
-          <span class="text-2xl font-bold tracking-wide text-white select-none"
-            >Alyssum</span
+        <div class="flex-none flex justify-center items-center">
+          <a
+             href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none leading-none logo-text"
           >
+            Alyssum
+          </a>
         </div>
-        <!-- Right: Auth Buttons -->
-        <div class="flex justify-end text-sm pr-2">
+        <!-- Right: Auth Buttons (텍스트 크기를 줄여 조화롭게 수정) -->
+        <div class="flex-1 flex justify-end items-center whitespace-nowrap">
           <a
             href="./마이페이지.html"
-            class="text-white px-3 py-1 transition hover:underline"
+            class="text-white px-2 py-1 transition hover:underline text-sm md:text-base auth-text"
             >마이페이지</a
           >
         </div>
@@ -151,7 +168,7 @@
         <h1>문의 사항</h1>
         <p>문의 사항은 아래 E-mail로 보내주세요.</p>
 
-        <div class="team-container">
+        <div class="team-container flex flex-col md:flex-row gap-12 justify-center">
           <div class="team">
             <h3>프론트엔드 팀</h3>
             <ul>
@@ -222,14 +239,18 @@
       // 이메일 복사 함수
       function copyEmail(element) {
         const email = element.textContent;
-        navigator.clipboard
-          .writeText(email)
-          .then(() => {
-            alert(`📋 이메일 주소가 복사되었습니다: ${email}`);
-          })
-          .catch((err) => {
-            alert("복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
-          });
+        const tempTextArea = document.createElement("textarea");
+        tempTextArea.value = email;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        
+        try {
+          document.execCommand('copy');
+          alert(`📋 이메일 주소가 복사되었습니다: ${email}`);
+        } catch (err) {
+          console.error("복사 실패");
+        }
+        document.body.removeChild(tempTextArea);
       }
     </script>
   </body>
