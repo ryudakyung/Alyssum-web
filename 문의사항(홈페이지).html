@@ -6,29 +6,44 @@
     <title>Alyssum</title>
     <link rel="stylesheet" href="./css/font.css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* 모바일 최적화 헤더 대응 */
+      @media (max-width: 640px) {
+        .header-container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        .logo-text {
+          font-size: 1.25rem;
+        }
+        .auth-text {
+          font-size: 0.75rem;
+        }
+      }
+    </style>
   </head>
   <body class="m-0 bg-white text-gray-800">
     
-    <!-- Header -->
+    <!-- Header: 모바일 깨짐 방지를 위해 flex 구조로 변경 -->
     <header class="bg-[#a7cba9] sticky top-0 z-10">
-      <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-6 py-5">
-        <!-- Left: 빈 공간 -->
-        <div></div>
+      <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 header-container">
+        <!-- Left: 빈 공간 (중앙 정렬 유지용) -->
+        <div class="flex-1"></div>
         
         <!-- Center: Logo -->
-        <div class="flex justify-center">
-          <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none">
+        <div class="flex-none flex justify-center items-center">
+          <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none logo-text">
             Alyssum
           </a>
         </div>
         
-        <!-- Right: Auth Buttons -->
-        <div class="flex justify-end items-center text-sm space-x-2">
-          <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">
+        <!-- Right: Auth Buttons (줄바꿈 방지 적용) -->
+        <div class="flex-1 flex justify-end items-center text-sm space-x-2 whitespace-nowrap">
+          <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline auth-text">
             회원가입
           </a>
-          <span class="text-white select-none">/</span>
-          <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">
+          <span class="text-white select-none auth-text">/</span>
+          <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline auth-text">
             로그인
           </a>
         </div>
@@ -140,7 +155,19 @@
           })
           .catch((err) => {
             console.error('복사 실패:', err);
-            alert('복사에 실패했습니다. 브라우저 설정을 확인해주세요.');
+            // iFrame 환경 대응을 위한 fallback
+            const textArea = document.createElement("textarea");
+            textArea.value = email;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const originalText = element.textContent;
+            element.textContent = '✓ 복사됨!';
+            setTimeout(() => {
+              element.textContent = originalText;
+            }, 2000);
           });
       }
 
