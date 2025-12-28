@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* 반복되는 컴포넌트만 커스텀 CSS */
-    
+  <style>    
     /* 회원가입 박스 */
     .signup-box {
       background-color: #f6f4f4;
@@ -156,116 +154,109 @@
     </form>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('signupForm');
-      const errorMsg = document.getElementById('errorMsg');
-      const submitBtn = document.getElementById('submitBtn');
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-      // Form 제출 이벤트
-      form.addEventListener('submit', async function(event) {
-        event.preventDefault();
+  // Firebase 설정
+  const firebaseConfig = {
+    apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
+    authDomain: "alyssum-24112.firebaseapp.com",
+    projectId: "alyssum-24112",
+    storageBucket: "alyssum-24112.firebasestorage.app",
+    messagingSenderId: "618441085953",
+    appId: "1:618441085953:web:e457579f5774e063801c00"
+  };
 
-        const id = document.getElementById('userId').value.trim();
-        const pw = document.getElementById('userPw').value;
-        const pwCheck = document.getElementById('userPwCheck').value;
+  // Firebase 초기화
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-        // 에러 메시지 초기화
-        hideError();
+  const form = document.getElementById('signupForm');
+  const errorMsg = document.getElementById('errorMsg');
+  const submitBtn = document.getElementById('submitBtn');
 
-        // 유효성 검사
-        if (!id || !pw || !pwCheck) {
-          showError('모든 항목을 입력해주세요.');
-          return;
-        }
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('show');
+  }
 
-        if (id.length < 4) {
-          showError('아이디는 4자 이상이어야 합니다.');
-          document.getElementById('userId').focus();
-          return;
-        }
+  function hideError() {
+    errorMsg.textContent = '';
+    errorMsg.classList.remove('show');
+  }
 
-        if (pw.length < 6) {
-          showError('비밀번호는 6자 이상이어야 합니다.');
-          document.getElementById('userPw').focus();
-          return;
-        }
+  // 입력 시 에러 제거
+  form.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', hideError);
+  });
 
-        if (pw !== pwCheck) {
-          showError('비밀번호가 일치하지 않습니다.');
-          document.getElementById('userPwCheck').focus();
-          return;
-        }
+  // 회원가입 처리
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        // 로딩 상태
-        submitBtn.disabled = true;
-        submitBtn.textContent = '처리 중...';
+    const email = document.getElementById('userId').value.trim();
+    const password = document.getElementById('userPw').value;
+    const passwordCheck = document.getElementById('userPwCheck').value;
 
-        try {
-          // localStorage 사용 (임시 구현)
-          const users = JSON.parse(localStorage.getItem('users') || '[]');
+    // 기본 검증
+    if (!email || !password || !passwordCheck) {
+      showError('모든 항목을 입력해주세요.');
+      return;
+    }
 
-          // 중복 아이디 체크
-          if (users.some(user => user.username === id)) {
-            showError('이미 존재하는 아이디입니다.');
-            return;
-          }
+    if (password.length < 6) {
+      showError('비밀번호는 6자 이상이어야 합니다.');
+      return;
+    }
 
-          // 새 사용자 추가
-          users.push({ username: id, password: pw });
-          localStorage.setItem('users', JSON.stringify(users));
+    if (password !== passwordCheck) {
+      showError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
 
-          alert(`회원가입이 완료되었습니다. 환영합니다, ${id}님!`);
-          
-          // 로그인 페이지로 이동
-          window.location.href = './로그인페이지.html';
+    submitBtn.disabled = true;
+    submitBtn.textContent = '회원가입 중...';
 
-        } catch (error) {
-          console.error('Error:', error);
-          showError('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = '회원가입';
-        }
-      });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-      // 에러 메시지 표시
-      function showError(message) {
-        errorMsg.textContent = message;
-        errorMsg.classList.add('show');
+      // (선택) 이메일 인증
+      await sendEmailVerification(userCredential.user);
+
+      alert('회원가입이 완료되었습니다! 이메일 인증을 확인해주세요.');
+      window.location.href = './로그인페이지.html';
+
+    } catch (error) {
+      console.error(error.code);
+
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          showError('이미 사용 중인 이메일입니다.');
+          break;
+        case 'auth/invalid-email':
+          showError('유효하지 않은 이메일 형식입니다.');
+          break;
+        case 'auth/weak-password':
+          showError('비밀번호가 너무 약합니다.');
+          break;
+        default:
+          showError('회원가입에 실패했습니다. 다시 시도해주세요.');
       }
 
-      // 에러 메시지 숨김
-      function hideError() {
-        errorMsg.textContent = '';
-        errorMsg.classList.remove('show');
-      }
-
-      // 입력 시 에러 메시지 자동 제거
-      const inputs = form.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.addEventListener('input', hideError);
-      });
-
-      // 키보드 접근성
-      form.addEventListener('keydown', function(e) {
-        if (e.key === 'Tab') {
-          const focusableElements = form.querySelectorAll(
-            'input:not([disabled]), button:not([disabled])'
-          );
-          const firstElement = focusableElements[0];
-          const lastElement = focusableElements[focusableElements.length - 1];
-
-          if (e.shiftKey && document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus();
-          } else if (!e.shiftKey && document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
-        }
-      });
-    });
-  </script>
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '회원가입';
+    }
+  });
+</script>
 </body>
 </html>
