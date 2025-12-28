@@ -6,7 +6,7 @@
   <title>Alyssum</title>
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+  <style>
     /* 페이지 메인 영역 */
     .intro-page {
       display: flex;
@@ -15,7 +15,7 @@
       justify-content: center;
       min-height: calc(100vh - 80px);
       gap: 3rem;
-      padding: 3rem 2rem;
+      padding: 3rem 1.5rem;
       box-sizing: border-box;
     }
     
@@ -129,23 +129,17 @@
       z-index: 50;
     }
     
-    .contact-btn:hover {
-      color: #111827;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
-    }
-    
-    /* 반응형 */
+    /* 반응형 수정 */
     @media (max-width: 768px) {
       .top-section {
         flex-direction: column;
-        gap: 2rem;
+        gap: 1.5rem;
       }
       
       .intro-photo {
         flex: 0 0 auto;
         width: 100%;
-        max-width: 300px;
+        max-width: 320px;
       }
       
       .intro-text {
@@ -156,17 +150,15 @@
         font-size: 16px;
       }
       
-      .intro-headline {
-        font-size: 18px;
-      }
-      
       .dev-profile {
-        width: 120px;
-        height: 120px;
+        width: 110px;
+        height: 110px;
       }
-      
-      .dev-name {
-        font-size: 14px;
+
+      /* 헤더 모바일 폰트 크기 및 간격 최적화 */
+      .header-menu {
+        font-size: 12px;
+        gap: 0.25rem;
       }
     }
   </style>
@@ -174,18 +166,23 @@
 <body class="m-0 bg-white">
   
   <!-- Header -->
-  <header class="bg-[#a7cba9] sticky top-0 z-10">
-    <div class="max-w-7xl mx-auto grid grid-cols-3 items-center px-8 py-4">
-      <div></div>
-      <div class="flex justify-center">
-        <a href="./홈페이지.html" class="text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
+  <header class="bg-[#a7cba9] sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+      <!-- 왼쪽 공백 (데스크탑 정렬용) -->
+      <div class="hidden md:block flex-1"></div>
+      
+      <!-- 중앙 로고 -->
+      <div class="flex-none md:flex-1 flex justify-center">
+        <a href="./홈페이지.html" class="text-xl md:text-2xl font-bold tracking-wide text-white select-none hover:opacity-80 transition">
           Alyssum
         </a>
       </div>
-      <div class="flex justify-end items-center text-sm space-x-2">
-        <a href="./회원가입.html" class="text-white px-2 py-1 transition hover:underline">회원가입</a>
-        <span class="text-white select-none">/</span>
-        <a href="./로그인페이지.html" class="text-white px-2 py-1 transition hover:underline">로그인</a>
+      
+      <!-- 오른쪽 메뉴: 한 줄 유지 핵심 부분 -->
+      <div class="flex-1 flex justify-end items-center space-x-1 md:space-x-2 whitespace-nowrap header-menu">
+        <a href="./회원가입.html" class="text-white px-1 py-1 transition hover:underline">회원가입</a>
+        <span class="text-white/70 select-none">/</span>
+        <a href="./로그인페이지.html" class="text-white px-1 py-1 transition hover:underline">로그인</a>
       </div>
     </div>
   </header>
@@ -217,12 +214,12 @@
     </section>
 
     <!-- 개발자 소개 -->
-    <section class="flex flex-col items-center gap-12 mt-8">
+    <section class="flex flex-col items-center gap-12 mt-8 w-full">
       
       <!-- 프론트엔드 -->
       <div>
         <h2 class="intro-headline mb-6">프론트엔드</h2>
-        <div class="flex justify-center gap-8 flex-wrap">
+        <div class="flex justify-center gap-4 md:gap-8 flex-wrap">
           <div class="dev-profile">
             <img src="./img/128.jpg" alt="김도언" />
             <div class="dev-overlay">
@@ -240,11 +237,11 @@
       </div>
 
       <!-- 백엔드 -->
-      <div>
+      <div class="mb-10">
         <h2 class="intro-headline mb-6">백엔드</h2>
-        <div class="flex justify-center gap-8 flex-wrap">
+        <div class="flex justify-center gap-4 md:gap-8 flex-wrap">
           <div class="dev-profile">
-            <img src="./img/gh.jpg" alt="이기현" />
+            <img src="./img/924.jpg" alt="이기현" />
             <div class="dev-overlay">
               <span class="dev-name">이기현</span>
             </div>
@@ -258,7 +255,7 @@
           </div>
 
           <div class="dev-profile">
-            <img src="./img/518.jpg" alt="조민서" />
+            <img src="./img/519.jpg" alt="조민서" />
             <div class="dev-overlay">
               <span class="dev-name">조민서</span>
             </div>
@@ -274,4 +271,3 @@
 
 </body>
 </html>
-
