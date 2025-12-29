@@ -6,10 +6,11 @@
   <title>Alyssum</title>
   <link rel="stylesheet" href="./css/font.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDK (Compat 모드 사용) -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<!-- Firebase SDK (Compat 모드) -->
+<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore-compat.js"></script>
+
   <style>
     /* 프로필 섹션 스타일 */
     .profile-section {
@@ -40,25 +41,6 @@
     .diary-card:hover {
       box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
       transform: translateY(-4px);
-    }
-
-    /* 썸네일 영역 스타일 */
-    .diary-thumbnail {
-      width: 100%;
-      height: 140px;
-      background-color: #e5e7eb;
-      margin-bottom: 12px;
-      overflow: hidden;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .diary-thumbnail img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
 
     .diary-card h4 {
@@ -97,19 +79,77 @@
     .loading-msg {
       @apply text-gray-500 py-20 text-center w-full;
     }
+    
+    /* 반응형 추가 */
+    @media (max-width: 768px) {
+      .profile-section {
+        padding: 24px 20px;
+        margin: 16px;
+      }
+      
+      .profile-info h2 {
+        font-size: 1.75rem;
+      }
+      
+      .diary-card {
+        max-width: calc(50% - 16px);
+        padding: 16px;
+      }
+      
+      .diary-card h4 {
+        font-size: 16px;
+      }
+      
+      .diary-card p {
+        font-size: 13px;
+      }
+      
+      .write-section {
+        padding-top: 48px;
+        padding-bottom: 48px;
+      }
+      
+      .write-icon {
+        font-size: 4rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .profile-section {
+        padding: 20px 16px;
+        margin: 12px;
+      }
+      
+      .profile-info h2 {
+        font-size: 1.5rem;
+      }
+      
+      .profile-info p {
+        font-size: 14px;
+      }
+      
+      .diary-card {
+        max-width: 100%;
+        padding: 14px;
+      }
+      
+      .write-icon {
+        font-size: 3.5rem;
+      }
+    }
   </style>
 </head>
 <body class="bg-[#f6f4f4]">
   <!-- Header -->
   <header class="bg-[#a7cba9] sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3 sm:py-5">
       <button id="menu-button" class="text-white focus:outline-none">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
-      <a href="./홈페이지.html" class="text-2xl font-bold text-white tracking-wider">Alyssum</a>
-      <button id="logout-button" class="text-white text-sm hover:underline">로그아웃</button>
+      <a href="./홈페이지.html" class="text-xl sm:text-2xl font-bold text-white tracking-wider">Alyssum</a>
+      <button id="logout-button" class="text-white text-xs sm:text-sm hover:underline">로그아웃</button>
     </div>
   </header>
 
@@ -137,9 +177,9 @@
 
     <!-- 최근 일기 섹션 -->
     <section class="py-12 px-6">
-      <h3 class="text-2xl font-bold mb-10 text-center text-gray-800">최근 일기</h3>
+      <h3 class="text-xl sm:text-2xl font-bold mb-10 text-center text-gray-800">최근 일기</h3>
       <div id="loadingPosts" class="loading-msg">게시글을 불러오는 중...</div>
-      <div id="postList" class="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
+      <div id="postList" class="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto">
         <!-- JS로 렌더링 -->
       </div>
     </section>
@@ -156,21 +196,21 @@
   </main>
 
   <script>
-    // Firebase 설정
-    const firebaseConfig = {
-      apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
-      authDomain: "alyssum-24112.firebaseapp.com",
-      databaseURL: "https://alyssum-24112-default-rtdb.firebaseio.com",
-      projectId: "alyssum-24112",
-      storageBucket: "alyssum-24112.firebasestorage.app",
-      messagingSenderId: "618441085953",
-      appId: "1:618441085953:web:e457579f5774e063801c00",
-    };
+  // Firebase 초기화
+  const firebaseConfig = {
+    apiKey: "AIzaSyACiRk9_TLxAjCN-rqXZJ4XRfTqoRAKXzk",
+    authDomain: "alyssum-24112.firebaseapp.com",
+    databaseURL: "https://alyssum-24112-default-rtdb.firebaseio.com",
+    projectId: "alyssum-24112",
+    storageBucket: "alyssum-24112.firebasestorage.app",
+    messagingSenderId: "618441085953",
+    appId: "1:618441085953:web:e457579f5774e063801c00"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+  firebase.initializeApp(firebaseConfig);
 
+  const auth = firebase.auth();
+  const db = firebase.firestore();
     // 메뉴 제어
     const menuButton = document.getElementById("menu-button");
     const sideMenu = document.getElementById("side-menu");
@@ -247,12 +287,6 @@
           card.className = "diary-card animate-fade-in";
           
           card.innerHTML = `
-            <div class="diary-thumbnail">
-              ${data.imageUrl 
-                ? `<img src="${data.imageUrl}" alt="썸네일" onerror="this.parentElement.innerHTML='<span class=\'text-gray-400 text-xs\'>이미지 로드 실패</span>'">` 
-                : `<div class="text-gray-400 text-xs">사진이 없어요</div>`
-              }
-            </div>
             <h4>${data.headline || "제목 없음"}</h4>
             <p>${data.content || "내용이 없습니다."}</p>
             <div class="diary-date">${dateStr}</div>
@@ -282,4 +316,3 @@
   </script>
 </body>
 </html>
-
